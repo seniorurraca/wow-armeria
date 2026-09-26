@@ -1,12 +1,12 @@
 // Pestaña "Botín": cada objeto ganado, del más nuevo al más viejo, con su origen y fecha.
 // Los guardados antes de registrar la fecha van al final, sin ella
-const ITEM_SOURCES = { cofre: 'Cofre', tirada: 'Loot de raid' };
+const ITEM_SOURCES = { cofre: 'Cofre', tirada: 'Loot de raid', mazmorra: 'Mazmorra' };
 
 function lootHistory(viewer) {
   const items = [...viewer.items].sort((a, b) => (b.obtained || '').localeCompare(a.obtained || ''));
 
   const rows = items.map(item => {
-    const meta = [ITEM_SOURCES[item.source], item.obtained && formatDate(item.obtained)].filter(Boolean).join(' · ');
+    const meta = [item.instance || ITEM_SOURCES[item.source], item.obtained && formatDate(item.obtained)].filter(Boolean).join(' · ');
     return `
       <a class="row" data-rarity="${item.rarity}" href="${itemUrl(item.id)}">
         <span class="row-icon slot"><img src="${escapeHtml(item.icon)}" alt=""></span>
