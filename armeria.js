@@ -169,7 +169,8 @@ function paperdoll(viewer, itemsById) {
     ['Equipados', Object.keys(viewer.equipped).length],
     ['Épicos', countRarity(items, 'epic')],
     ['Legendarios', countRarity(items, 'legendary')],
-    ['Hechizos', viewer.spells.length]
+    ['Hechizos', viewer.spells.length],
+    ['Duelos', `${viewer.duelWins || 0} V · ${viewer.duelLosses || 0} D`]
   ];
 
   return `
