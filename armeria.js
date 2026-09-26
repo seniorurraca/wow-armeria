@@ -114,20 +114,30 @@ function showStatus(text, withBack) {
 
 // ---------- Lista de aventureros ----------
 
+// Ranking por GearScore del equipo puesto; desempata por legendarios y épicos
 function renderRoster(armory) {
-  const viewers = Object.entries(armory.viewers)
-    .sort(([, a], [, b]) => a.name.localeCompare(b.name));
+  const ranked = Object.entries(armory.viewers)
+    .map(([login, viewer]) => {
+      const items = uniqueItems(viewer);
+      return { login, viewer, score: gearScore(viewer), epic: countRarity(items, 'epic'), legendary: countRarity(items, 'legendary') };
+    })
+    .sort((a, b) => b.score - a.score || b.legendary - a.legendary || b.epic - a.epic || a.viewer.name.localeCompare(b.viewer.name));
 
-  const rows = viewers.map(([login, viewer]) => `
+  const rows = ranked.map(({ login, viewer, score, epic, legendary }, i) => `
     <a class="row" href="?u=${encodeURIComponent(login)}">
+      <span class="rank">${i + 1}</span>
       <img class="row-icon" src="${portrait(viewer)}" alt="">
       <span class="row-name" style="color:${classOf(viewer).color}">${escapeHtml(viewer.name)}</span>
-      <span class="row-meta">${uniqueItems(viewer).length} objetos · ${viewer.spells.length} hechizos</span>
+      <span class="row-meta">
+        <span data-rarity="legendary" class="item-name">${legendary} leg.</span> ·
+        <span data-rarity="epic" class="item-name">${epic} ép.</span>
+      </span>
+      <span class="row-score">${score}<small>GS</small></span>
     </a>`);
 
   app.innerHTML = `
     <section class="frame">
-      <header class="frame-title"><h1>Armería</h1></header>
+      <header class="frame-title"><h1>Armería</h1><p class="subtitle">Clasificación de aventureros</p></header>
       <div class="panel">
         <div class="list">${rows.join('') || '<p class="status">Nadie tiene botín todavía.</p>'}</div>
       </div>
@@ -171,12 +181,12 @@ function showTab(tab) {
 function paperdoll(viewer, itemsById) {
   const column = (side) => `<div class="slots ${side}">${PAPERDOLL[side].map(slot => slotHtml(slot, itemsById[viewer.equipped[slot]])).join('')}</div>`;
   const items = uniqueItems(viewer);
-  const count = rarity => items.filter(item => item.rarity === rarity).length;
   const stats = [
+    ['GearScore', gearScore(viewer)],
     ['Objetos', items.length],
     ['Equipados', Object.keys(viewer.equipped).length],
-    ['Épicos', count('epic')],
-    ['Legendarios', count('legendary')],
+    ['Épicos', countRarity(items, 'epic')],
+    ['Legendarios', countRarity(items, 'legendary')],
     ['Hechizos', viewer.spells.length]
   ];
 
@@ -211,6 +221,10 @@ function uniqueItems(viewer) {
     byId.set(item.id, entry);
   });
   return [...byId.values()];
+}
+
+function countRarity(items, rarity) {
+  return items.filter(item => item.rarity === rarity).length;
 }
 
 function inventory(viewer) {
