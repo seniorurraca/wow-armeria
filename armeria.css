@@ -158,17 +158,14 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 
-.crest {
-  position: absolute;
-  top: 18%;
-  left: 50%;
-  width: 55%;
-  max-width: 140px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  opacity: .5;
-  filter: saturate(.8);
-  box-shadow: 0 0 40px color-mix(in srgb, var(--class-color) 40%, transparent);
+.silhouette {
+  flex: 1 1 0;
+  height: 0;
+  width: 100%;
+  margin-top: 8px;
+  filter:
+    drop-shadow(0 0 1px color-mix(in srgb, var(--class-color) 70%, transparent))
+    drop-shadow(0 0 14px color-mix(in srgb, var(--class-color) 35%, transparent));
 }
 
 .stats {
@@ -232,6 +229,95 @@ a { color: inherit; text-decoration: none; }
   border-radius: 3px;
   background: #000;
   color: var(--gold);
+}
+
+/* ---------- Libro de hechizos (pergamino) ---------- */
+
+.spellbook {
+  display: flex;
+  flex-direction: column;
+  min-height: 398px;
+  padding: 14px;
+  border: 2px solid #2b1d0c;
+  border-radius: 4px;
+  background:
+    radial-gradient(ellipse 30% 20% at 20% 25%, rgba(120, 80, 30, .18), transparent),
+    radial-gradient(ellipse 25% 18% at 75% 70%, rgba(120, 80, 30, .15), transparent),
+    radial-gradient(ellipse at center, #e6d6ab 0%, #cfb685 55%, #9b7c4a 100%);
+  box-shadow: inset 0 0 28px rgba(60, 35, 10, .85), 0 0 0 1px #000;
+}
+
+.spell-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: 10px 14px;
+}
+
+.spell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.spell-icon {
+  flex: none;
+  width: var(--slot);
+  height: var(--slot);
+  border: 2px solid #1a1a1a;
+  border-radius: 4px;
+  background: #000;
+  box-shadow: 0 0 0 1px #6b5a3a, 2px 2px 4px rgba(0, 0, 0, .6);
+  overflow: hidden;
+}
+
+.spell-icon img { display: block; width: 100%; height: 100%; }
+.spell:hover .spell-icon { box-shadow: 0 0 0 1px var(--gold), 0 0 8px rgba(255, 209, 0, .6); }
+
+.spell .spell-name {
+  font-family: Marcellus, serif;
+  font-size: 16px;
+  line-height: 1.1;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #3a2400, 1px -1px 0 #3a2400, -1px 1px 0 #3a2400;
+}
+
+.spell-empty {
+  grid-column: 1 / -1;
+  padding: 24px;
+  text-align: center;
+  color: #4a3212;
+  font-family: Marcellus, serif;
+}
+
+.spell-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.page-label {
+  color: var(--gold);
+  font-family: Marcellus, serif;
+  text-shadow: var(--outline);
+}
+
+.spell-pager button {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #1a1a1a;
+  border-radius: 4px;
+  background: linear-gradient(#3a3a3a, #111);
+  box-shadow: 0 0 0 1px #6b5a3a;
+  color: var(--gold);
+  cursor: pointer;
+}
+
+.spell-pager button:disabled {
+  color: #555;
+  cursor: default;
 }
 
 /* ---------- Pestañas inferiores (rojo oscuro con texto dorado) ---------- */
