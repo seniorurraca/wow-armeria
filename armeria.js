@@ -89,8 +89,11 @@ const SILHOUETTE = `
 // Con ?u=nick se muestra la ficha de ese espectador; sin parámetro, la landing con el ranking
 const viewerLogin = (new URLSearchParams(location.search).get('u') || '').toLowerCase();
 
+// En la ficha, de la landing solo queda "Cómo participar" debajo del personaje
 if (viewerLogin) {
-  document.getElementById('landing').hidden = true;
+  const landing = document.getElementById('landing');
+  landing.querySelectorAll('.hero, #redes, #armeria').forEach(section => section.hidden = true);
+  landing.before(app);
   app.hidden = false;
   showStatus('Cargando la armería...');
 }

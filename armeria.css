@@ -25,6 +25,8 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
+[hidden] { display: none !important; }
+
 [data-rarity="poor"]      { --rarity: #9D9D9D; }
 [data-rarity="common"]    { --rarity: #FFFFFF; }
 [data-rarity="uncommon"]  { --rarity: #1EFF00; }
