@@ -1,0 +1,278 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #FFD100;
+  --slot: 44px;
+  --outline: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+body {
+  min-height: 100vh;
+  padding: 32px 16px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(80, 60, 30, .35), transparent 60%),
+    #0d0b09;
+  color: #fff;
+  font-family: Arimo, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+#app {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+a { color: inherit; text-decoration: none; }
+
+[data-rarity="poor"]      { --rarity: #9D9D9D; }
+[data-rarity="common"]    { --rarity: #FFFFFF; }
+[data-rarity="uncommon"]  { --rarity: #1EFF00; }
+[data-rarity="rare"]      { --rarity: #0070DD; }
+[data-rarity="epic"]      { --rarity: #A335EE; }
+[data-rarity="legendary"] { --rarity: #FF8000; }
+
+.status {
+  padding: 24px;
+  text-align: center;
+  color: var(--gold);
+  text-shadow: var(--outline);
+}
+
+/* ---------- Marco de la ventana (gris piedra con borde biselado, como en Classic) ---------- */
+
+.frame {
+  position: relative;
+  border: 3px solid #6b6b6b;
+  border-radius: 8px;
+  background: linear-gradient(#262626, #161616);
+  box-shadow:
+    inset 0 0 0 2px #0a0a0a,
+    inset 0 0 0 3px #3d3d3d,
+    0 0 0 1px #000,
+    0 8px 30px rgba(0, 0, 0, .8);
+  padding: 8px;
+}
+
+.frame-title {
+  position: relative;
+  min-height: 64px;
+  padding: 6px 8px 8px;
+  margin-bottom: 8px;
+  text-align: center;
+  background: linear-gradient(#1c1c1c, #0d0d0d);
+  border: 1px solid #3d3d3d;
+  border-radius: 4px;
+}
+
+.frame-title:has(.portrait) { padding-left: 84px; }
+
+.frame-title h1 {
+  font-family: Marcellus, serif;
+  font-weight: normal;
+  font-size: 20px;
+  color: #fff;
+  text-shadow: var(--outline);
+}
+
+.frame-title .subtitle {
+  margin-top: 4px;
+  color: var(--class-color);
+  text-shadow: var(--outline);
+}
+
+.portrait {
+  position: absolute;
+  top: -22px;
+  left: -14px;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 4px solid #8a8a8a;
+  box-shadow: 0 0 0 2px #000, inset 0 0 8px #000, 0 4px 10px rgba(0, 0, 0, .7);
+  background: #000;
+}
+
+.panel {
+  min-height: 420px;
+  padding: 10px;
+  border: 1px solid #3d3d3d;
+  border-radius: 4px;
+  background: linear-gradient(rgba(0, 0, 0, .35), rgba(0, 0, 0, .6));
+}
+
+/* ---------- Casilleros ---------- */
+
+.slot {
+  position: relative;
+  display: block;
+  flex: none;
+  width: var(--slot);
+  height: var(--slot);
+  border: 2px solid var(--rarity, #5A5A5A);
+  border-radius: 5px;
+  background: #000;
+  box-shadow: 0 0 0 1px #000, inset 0 0 6px rgba(0, 0, 0, .8);
+  overflow: hidden;
+}
+
+.slot img { display: block; width: 100%; height: 100%; }
+.slot:not(.empty):hover { box-shadow: 0 0 0 1px #000, 0 0 10px var(--rarity); }
+.slot.empty img { opacity: .55; }
+
+.count {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  font-size: 12px;
+  text-shadow: var(--outline);
+}
+
+/* ---------- Personaje ---------- */
+
+.paperdoll {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+}
+
+.slots {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slots.bottom {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.model {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: radial-gradient(ellipse at 50% 35%, color-mix(in srgb, var(--class-color) 25%, #1a1a1a), #050505 75%);
+  overflow: hidden;
+}
+
+.crest {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 55%;
+  max-width: 140px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  opacity: .5;
+  filter: saturate(.8);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--class-color) 40%, transparent);
+}
+
+.stats {
+  position: relative;
+  margin: 8px;
+  padding: 6px 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, .75);
+}
+
+.stats div { display: flex; justify-content: space-between; gap: 8px; }
+.stats dt { color: var(--gold); text-shadow: var(--outline); }
+.stats dd { color: #fff; text-shadow: var(--outline); }
+
+/* ---------- Listas (aventureros, inventario, hechizos) ---------- */
+
+.list { display: grid; gap: 4px; }
+.list.two-columns { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  border-radius: 4px;
+  min-width: 0;
+}
+
+.row:hover { background: rgba(255, 255, 255, .06); }
+
+.row-icon {
+  --slot: 36px;
+  flex: none;
+  width: var(--slot);
+  height: var(--slot);
+  border: 2px solid var(--rarity, #5A5A5A);
+  border-radius: 5px;
+}
+
+.row-name {
+  flex: 1;
+  min-width: 0;
+  text-shadow: var(--outline);
+}
+
+.row-meta { flex: none; font-size: 12px; color: #aaa; }
+.row-meta.equipped { color: var(--gold); }
+
+.item-name { color: var(--rarity); }
+.spell-name { color: var(--gold); }
+
+.hint {
+  margin-bottom: 8px;
+  color: #bbb;
+  font-size: 13px;
+}
+
+.hint code {
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: #000;
+  color: var(--gold);
+}
+
+/* ---------- Pestañas inferiores (rojo oscuro con texto dorado) ---------- */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding-left: 16px;
+}
+
+.tabs button {
+  padding: 6px 14px 8px;
+  border: 2px solid #6b6b6b;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(#1a1a1a, #2a0d0a);
+  color: var(--gold);
+  font: inherit;
+  text-shadow: var(--outline);
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background: linear-gradient(#262626, #3a120d);
+  color: #fff;
+  transform: translateY(-2px);
+  padding-top: 8px;
+}
+
+.back {
+  display: block;
+  margin-top: 16px;
+  text-align: center;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.back:hover { text-decoration: underline; }
+
+@media (max-width: 420px) {
+  :root { --slot: 38px; }
+  .slots { gap: 4px; }
+  .paperdoll { gap: 6px; }
+}
