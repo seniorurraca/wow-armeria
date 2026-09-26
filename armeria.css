@@ -8,7 +8,6 @@
 
 body {
   min-height: 100vh;
-  padding: 32px 16px;
   background:
     radial-gradient(ellipse at 50% 0%, rgba(80, 60, 30, .35), transparent 60%),
     #0d0b09;
@@ -19,7 +18,8 @@ body {
 }
 
 #app {
-  max-width: 560px;
+  padding: 32px 16px;
+  max-width: 592px;
   margin: 0 auto;
 }
 

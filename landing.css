@@ -1,0 +1,308 @@
+:root {
+  --page: #0b0d14;
+  --panel: #131722;
+  --line: #2a2f3d;
+  --button: #f0c75e;
+  --text-soft: #c9c3b4;
+  --live: #eb0400;
+}
+
+html { scroll-behavior: smooth; }
+
+body { background: var(--page); }
+
+code {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, .55);
+  color: var(--gold);
+  font-family: Consolas, monospace;
+  font-size: .9em;
+  -webkit-text-stroke: 0;
+}
+
+/* ---------- Barra superior ---------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(11, 13, 20, .92);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(6px);
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 10px 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
+}
+
+.brand-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--button);
+}
+
+.brand strong { display: block; font-size: 18px; }
+
+.brand small {
+  display: block;
+  color: var(--button);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.topnav { display: flex; gap: 20px; }
+.topnav a { color: var(--text-soft); }
+.topnav a:hover { color: var(--button); }
+
+/* ---------- Indicador en vivo ---------- */
+
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-soft);
+}
+
+.live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #6b6b6b;
+}
+
+[data-live="on"] .live-dot,
+[data-live="on"] ~ * .live-dot {
+  background: var(--live);
+  box-shadow: 0 0 0 0 var(--live);
+  animation: livePulse 1.6s infinite;
+}
+
+[data-live="on"] { border-color: var(--live); color: #fff; }
+
+@keyframes livePulse {
+  70% { box-shadow: 0 0 0 8px rgba(235, 4, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(235, 4, 0, 0); }
+}
+
+/* ---------- Hero con carrusel ---------- */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: min(78vh, 720px);
+  overflow: hidden;
+}
+
+.hero-slides { position: absolute; inset: 0; }
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1.5s ease, transform 8s ease;
+}
+
+.hero-slide.active { opacity: 1; transform: scale(1); }
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(11, 13, 20, .92) 0%, rgba(11, 13, 20, .6) 45%, rgba(11, 13, 20, .1) 75%),
+    linear-gradient(0deg, var(--page) 0%, transparent 30%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 16px;
+}
+
+.eyebrow {
+  color: var(--button);
+  font-size: 13px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 560px;
+  margin: 12px 0 16px;
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: normal;
+  line-height: 1.05;
+  color: #f7ecd2;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .6);
+}
+
+.hero-text {
+  max-width: 520px;
+  color: #e3dccb;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-text-stroke: 0;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 16px;
+  background: rgba(11, 13, 20, .45);
+  transition: transform .15s, background .15s;
+}
+
+.button:hover { transform: translateY(-2px); background: rgba(11, 13, 20, .75); }
+
+.button.primary {
+  border-color: var(--button);
+  background: var(--button);
+  color: #1b1405;
+}
+
+.button.primary:hover { background: #ffd978; }
+
+/* ---------- Secciones ---------- */
+
+.section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 56px 16px 0;
+}
+
+.section h2 {
+  font-size: 32px;
+  font-weight: normal;
+  color: var(--button);
+}
+
+.section-text {
+  margin-top: 6px;
+  color: var(--text-soft);
+  font-size: 16px;
+  -webkit-text-stroke: 0;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  transition: transform .15s, border-color .15s;
+}
+
+a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--button)); }
+
+.card strong { display: block; font-size: 19px; }
+
+.card small {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-text-stroke: 0;
+}
+
+.card svg { flex: none; width: 40px; height: 40px; fill: var(--accent); }
+.card.twitch { --accent: #9146ff; }
+.card.youtube { --accent: #ff0033; }
+.card.discord { --accent: #5865f2; }
+
+.card.reward img {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #5a5a5a;
+  border-radius: 6px;
+}
+
+.commands {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 8px 16px;
+  margin-top: 20px;
+}
+
+.commands div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--button);
+  background: var(--panel);
+}
+
+.commands code { align-self: flex-start; font-size: 15px; }
+.commands span { color: var(--text-soft); font-size: 14px; -webkit-text-stroke: 0; }
+
+#armeria .frame { max-width: 720px; margin-top: 20px; }
+#armeria .panel { min-height: 0; }
+
+.footer {
+  max-width: 1120px;
+  margin: 64px auto 0;
+  padding: 24px 16px 32px;
+  border-top: 1px solid var(--line);
+  color: #7d7867;
+  font-size: 12px;
+  text-align: center;
+  -webkit-text-stroke: 0;
+}
+
+@media (max-width: 720px) {
+  .topnav { display: none; }
+  .hero { min-height: 70vh; }
+  .hero::after {
+    background:
+      linear-gradient(0deg, var(--page) 5%, rgba(11, 13, 20, .7) 55%, rgba(11, 13, 20, .35) 100%);
+  }
+  .row-meta { display: none; }
+}

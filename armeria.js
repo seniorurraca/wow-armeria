@@ -86,11 +86,22 @@ const SILHOUETTE = `
     </g>
   </svg>`;
 
+// Con ?u=nick se muestra la ficha de ese espectador; sin parámetro, la landing con el ranking
+const viewerLogin = (new URLSearchParams(location.search).get('u') || '').toLowerCase();
+
+if (viewerLogin) {
+  document.getElementById('landing').hidden = true;
+  app.hidden = false;
+  showStatus('Cargando la armería...');
+}
+
 loadArmory()
   .then(render)
   .catch(err => {
     console.log('[Armería] No se pudo cargar', err);
-    showStatus('No se pudo cargar la armería. Prueba de nuevo en un rato.');
+    const text = 'No se pudo cargar la armería. Prueba de nuevo en un rato.';
+    if (viewerLogin) showStatus(text);
+    else renderRankingStatus(text);
   });
 
 async function loadArmory() {
@@ -101,47 +112,14 @@ async function loadArmory() {
 }
 
 function render(armory) {
-  const login = (new URLSearchParams(location.search).get('u') || '').toLowerCase();
-  if (!login) renderRoster(armory);
-  else if (armory.viewers[login]) renderViewer(armory.viewers[login]);
-  else showStatus(`${login} todavía no tiene botín. ¡Canjea un cofre en el stream!`, true);
+  if (!viewerLogin) renderRanking(armory);
+  else if (armory.viewers[viewerLogin]) renderViewer(armory.viewers[viewerLogin]);
+  else showStatus(`${viewerLogin} todavía no tiene botín. ¡Canjea un cofre en el stream!`, true);
 }
 
 function showStatus(text, withBack) {
-  const back = withBack ? '<a class="back" href="./">Ver todos los aventureros</a>' : '';
+  const back = withBack ? '<a class="back" href="./#armeria">Ver todos los aventureros</a>' : '';
   app.innerHTML = `<p class="status">${escapeHtml(text)}</p>${back}`;
-}
-
-// ---------- Lista de aventureros ----------
-
-// Ranking por GearScore del equipo puesto; desempata por legendarios y épicos
-function renderRoster(armory) {
-  const ranked = Object.entries(armory.viewers)
-    .map(([login, viewer]) => {
-      const items = uniqueItems(viewer);
-      return { login, viewer, score: gearScore(viewer), epic: countRarity(items, 'epic'), legendary: countRarity(items, 'legendary') };
-    })
-    .sort((a, b) => b.score - a.score || b.legendary - a.legendary || b.epic - a.epic || a.viewer.name.localeCompare(b.viewer.name));
-
-  const rows = ranked.map(({ login, viewer, score, epic, legendary }, i) => `
-    <a class="row" href="?u=${encodeURIComponent(login)}">
-      <span class="rank">${i + 1}</span>
-      <img class="row-icon" src="${portrait(viewer)}" alt="">
-      <span class="row-name" style="color:${classOf(viewer).color}">${escapeHtml(viewer.name)}</span>
-      <span class="row-meta">
-        <span data-rarity="legendary" class="item-name">${legendary} leg.</span> ·
-        <span data-rarity="epic" class="item-name">${epic} ép.</span>
-      </span>
-      <span class="row-score">${coloredGearScore(score)}<small>GS</small></span>
-    </a>`);
-
-  app.innerHTML = `
-    <section class="frame">
-      <header class="frame-title"><h1>Armería</h1><p class="subtitle">Clasificación de aventureros</p></header>
-      <div class="panel">
-        <div class="list">${rows.join('') || '<p class="status">Nadie tiene botín todavía.</p>'}</div>
-      </div>
-    </section>`;
 }
 
 // ---------- Personaje ----------
@@ -164,7 +142,7 @@ function renderViewer(viewer) {
     <nav class="tabs">
       ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
     </nav>
-    <a class="back" href="./">Ver todos los aventureros</a>`;
+    <a class="back" href="./#armeria">Ver todos los aventureros</a>`;
 
   app.querySelectorAll('.tabs button').forEach(button =>
     button.addEventListener('click', () => showTab(button.dataset.tab)));
