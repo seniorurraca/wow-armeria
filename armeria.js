@@ -44,7 +44,7 @@ const PAPERDOLL = {
 };
 
 const RARITIES = ['poor', 'common', 'uncommon', 'rare', 'epic', 'legendary'];
-const TABS = { character: 'Personaje', inventory: 'Inventario', spells: 'Hechizos' };
+const TABS = { character: 'Personaje', inventory: 'Inventario', spells: 'Hechizos', achievements: 'Logros' };
 const SPELLS_PER_PAGE = 12;
 
 const app = document.getElementById('app');
@@ -116,7 +116,7 @@ async function loadArmory() {
 
 function render(armory) {
   if (!viewerLogin) renderRanking(armory);
-  else if (armory.viewers[viewerLogin]) renderViewer(armory.viewers[viewerLogin]);
+  else if (armory.viewers[viewerLogin]) renderViewer(armory.viewers[viewerLogin], armory.achievements || []);
   else showStatus(`${viewerLogin} todavía no tiene botín. ¡Canjea un cofre en el stream!`, true);
 }
 
@@ -127,7 +127,7 @@ function showStatus(text, withBack) {
 
 // ---------- Personaje ----------
 
-function renderViewer(viewer) {
+function renderViewer(viewer, achievements) {
   const cls = classOf(viewer);
   const itemsById = Object.fromEntries(viewer.items.map(item => [item.id, item]));
 
@@ -141,6 +141,7 @@ function renderViewer(viewer) {
       <div class="panel" data-tab="character">${paperdoll(viewer, itemsById)}</div>
       <div class="panel" data-tab="inventory" hidden>${inventory(viewer)}</div>
       <div class="panel" data-tab="spells" hidden>${spellbook()}</div>
+      <div class="panel" data-tab="achievements" hidden>${achievementList(viewer, achievements)}</div>
     </section>
     <nav class="tabs">
       ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
