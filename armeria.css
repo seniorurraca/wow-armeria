@@ -384,6 +384,8 @@ a { color: inherit; text-decoration: none; }
   :root { --slot: 38px; }
   .slots { gap: 4px; }
   .paperdoll { gap: 6px; }
+  .tabs { gap: 2px; padding-left: 0; justify-content: center; }
+  .tabs button { padding: 6px 7px 8px; font-size: 13px; }
 }
 
 /* ---------- Logros ---------- */

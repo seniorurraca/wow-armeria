@@ -44,7 +44,7 @@ const PAPERDOLL = {
 };
 
 const RARITIES = ['poor', 'common', 'uncommon', 'rare', 'epic', 'legendary'];
-const TABS = { character: 'Personaje', inventory: 'Inventario', spells: 'Hechizos', achievements: 'Logros' };
+const TABS = { character: 'Personaje', inventory: 'Inventario', loot: 'Botín', spells: 'Hechizos', achievements: 'Logros' };
 const SPELLS_PER_PAGE = 12;
 
 const app = document.getElementById('app');
@@ -140,6 +140,7 @@ function renderViewer(viewer, achievements) {
       </header>
       <div class="panel" data-tab="character">${paperdoll(viewer, itemsById)}</div>
       <div class="panel" data-tab="inventory" hidden>${inventory(viewer)}</div>
+      <div class="panel" data-tab="loot" hidden>${lootHistory(viewer)}</div>
       <div class="panel" data-tab="spells" hidden>${spellbook()}</div>
       <div class="panel" data-tab="achievements" hidden>${achievementList(viewer, achievements)}</div>
     </section>
