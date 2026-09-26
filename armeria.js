@@ -132,7 +132,7 @@ function renderRoster(armory) {
         <span data-rarity="legendary" class="item-name">${legendary} leg.</span> ·
         <span data-rarity="epic" class="item-name">${epic} ép.</span>
       </span>
-      <span class="row-score">${score}<small>GS</small></span>
+      <span class="row-score">${coloredGearScore(score)}<small>GS</small></span>
     </a>`);
 
   app.innerHTML = `
@@ -182,7 +182,7 @@ function paperdoll(viewer, itemsById) {
   const column = (side) => `<div class="slots ${side}">${PAPERDOLL[side].map(slot => slotHtml(slot, itemsById[viewer.equipped[slot]])).join('')}</div>`;
   const items = uniqueItems(viewer);
   const stats = [
-    ['GearScore', gearScore(viewer)],
+    ['GearScore', coloredGearScore(gearScore(viewer))],
     ['Objetos', items.length],
     ['Equipados', Object.keys(viewer.equipped).length],
     ['Épicos', countRarity(items, 'epic')],
@@ -221,6 +221,10 @@ function uniqueItems(viewer) {
     byId.set(item.id, entry);
   });
   return [...byId.values()];
+}
+
+function coloredGearScore(score) {
+  return `<span style="color:${gearScoreColor(score)}">${score}</span>`;
 }
 
 function countRarity(items, rarity) {
