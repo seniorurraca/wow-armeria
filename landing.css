@@ -242,7 +242,8 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
 
 .card strong { display: block; font-size: 19px; }
 
-.card small {
+.card small,
+.steps small {
   display: block;
   margin-top: 4px;
   color: var(--text-soft);
@@ -263,6 +264,80 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
   border: 2px solid #5a5a5a;
   border-radius: 6px;
 }
+
+.card.reward { align-items: flex-start; }
+
+.section h3 {
+  margin-top: 40px;
+  font-size: 24px;
+  font-weight: normal;
+  color: var(--button);
+}
+
+.dungeon {
+  position: relative;
+  margin-top: 40px;
+  padding: 28px;
+  border: 1px solid #6b5520;
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at top right, rgba(240, 199, 94, .14), transparent 60%),
+    var(--panel);
+}
+
+.dungeon h3,
+.dungeon .section-text { padding-right: 80px; }
+
+.dungeon h3 {
+  margin-top: 0;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.dungeon-icon {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  width: 64px;
+  height: 64px;
+  border: 2px solid var(--button);
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(240, 199, 94, .35);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 20px 0 16px;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, .3);
+  counter-increment: step;
+}
+
+.steps li::before {
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: var(--button);
+  color: var(--page);
+  font-weight: bold;
+  -webkit-text-stroke: 0;
+}
+
+.steps strong { display: block; font-size: 17px; }
 
 .commands {
   display: grid;
@@ -305,4 +380,8 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
       linear-gradient(0deg, var(--page) 5%, rgba(11, 13, 20, .7) 55%, rgba(11, 13, 20, .35) 100%);
   }
   .row-meta { display: none; }
+  .dungeon { padding: 20px 16px; }
+  .dungeon h3, .dungeon .section-text { padding-right: 60px; }
+  .dungeon h3 { font-size: 22px; }
+  .dungeon-icon { top: 18px; right: 16px; width: 48px; height: 48px; }
 }
