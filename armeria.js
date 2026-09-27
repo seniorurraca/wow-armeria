@@ -134,9 +134,11 @@ function renderViewer(viewer, achievements) {
   app.innerHTML = `
     <section class="frame" style="--class-color:${cls.color}">
       <header class="frame-title">
-        <img class="portrait" src="${portrait(viewer)}" alt="">
-        <h1>${escapeHtml(viewer.name)}</h1>
-        <p class="subtitle">${cls.name}</p>
+        <img class="portrait" ${frameAttributes(viewer)} src="${portrait(viewer)}" alt="">
+        <h1>${escapeHtml(titledName(viewer))}</h1>
+        <p class="subtitle">${levelText(viewer)} ${cls.name}</p>
+        ${xpBar(viewer)}
+        ${titlePicker(viewer)}
       </header>
       <div class="panel" data-tab="character">${paperdoll(viewer, itemsById)}</div>
       <div class="panel" data-tab="inventory" hidden>${inventory(viewer)}</div>
@@ -154,6 +156,7 @@ function renderViewer(viewer, achievements) {
   setupSpellbook(viewer);
   setupReforge(viewer);
   setupEquipButtons(viewer);
+  setupTitlePicker(viewer);
   showTab('character');
 }
 

@@ -63,8 +63,11 @@ function renderRanking(armory) {
   document.getElementById('ranking-list').innerHTML = ranked.map(({ login, viewer, score, epic, legendary }, i) => `
     <a class="row" href="?u=${encodeURIComponent(login)}">
       <span class="rank">${i + 1}</span>
-      <img class="row-icon" src="${portrait(viewer)}" alt="">
-      <span class="row-name" style="color:${classOf(viewer).color}">${escapeHtml(viewer.name)}</span>
+      <span class="row-portrait">
+        <img class="row-icon" ${frameAttributes(viewer)} src="${portrait(viewer)}" alt="">
+        <span class="level-badge" title="${levelText(viewer)}">${levelOf(viewer)}</span>
+      </span>
+      <span class="row-name" style="color:${classOf(viewer).color}">${escapeHtml(titledName(viewer))}</span>
       <span class="row-meta">
         <span data-rarity="legendary" class="item-name">${legendary} leg.</span> ·
         <span data-rarity="epic" class="item-name">${epic} ép.</span>
