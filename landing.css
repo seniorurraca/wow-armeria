@@ -269,6 +269,9 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
 
 .card.reward { align-items: flex-start; }
 
+/* Canjes en columnas angostas: ícono arriba y texto debajo con todo el ancho, como los pasos de la mazmorra */
+.cards .card.reward { flex-direction: column; gap: 12px; }
+
 .section h3 {
   margin-top: 40px;
   font-size: 24px;

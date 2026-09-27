@@ -152,8 +152,8 @@
 
 /* ---------- Ventana "Vender" del Inventario ---------- */
 
-.auction-button { flex: none; padding: 3px 8px; font-size: 12px; background: linear-gradient(#6a4c1c, #2e1f08); }
-.bag-list.picking .auction-button { display: none; }
+.sell-button { flex: none; padding: 3px 8px; font-size: 12px; background: linear-gradient(#6a4c1c, #2e1f08); }
+.bag-list.picking .sell-button { display: none; }
 .bag-slot[data-id] { cursor: pointer; }
 
 .sell-price { display: flex; gap: 10px; justify-content: center; }
@@ -166,3 +166,31 @@
 .sell-summary div { display: flex; justify-content: space-between; gap: 12px; }
 .sell-summary dt { color: var(--gold); text-shadow: var(--outline); }
 .sell-summary dd { text-shadow: var(--outline); }
+
+/* Vendedor o subasta: dos botones grandes con ícono; el elegido queda marcado en dorado */
+.sell-choices { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+.sell-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 190px;
+  padding: 8px 10px;
+  border: 1px solid #5a4a1a;
+  border-radius: 6px;
+  background: linear-gradient(#2a2016, #120c06);
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sell-choice img { flex: none; width: 36px; height: 36px; border: 1px solid #000; border-radius: 4px; }
+.sell-choice strong { display: block; color: var(--gold); font-weight: normal; text-shadow: var(--outline); }
+.sell-choice small { display: block; color: #ccc; font-size: 12px; }
+.sell-choice:hover:not(:disabled) { filter: brightness(1.25); }
+.sell-choice.active { border-color: var(--gold); box-shadow: 0 0 10px rgba(255, 209, 0, .45); }
+.sell-choice:disabled { cursor: default; opacity: .5; filter: grayscale(1); }
+
+.sell-detail { display: grid; gap: 10px; justify-items: center; }
+.sell-detail:empty { display: none; }

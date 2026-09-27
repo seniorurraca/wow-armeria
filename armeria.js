@@ -160,7 +160,7 @@ function renderViewer(viewer, achievements) {
   setupSpellbook(viewer);
   setupReforge(viewer);
   setupEquipButtons(viewer);
-  setupAuctionButtons(viewer);
+  setupSellButtons(viewer);
   setupPagedLists(app);
   setupTitlePicker(viewer);
   showTab('character');
@@ -239,7 +239,7 @@ function inventory(viewer) {
         <span class="row-name item-name">${escapeHtml(item.name)}</span>
       </a>
       ${equipButton(item, viewer)}
-      ${auctionButton(item)}
+      ${sellButton(item)}
     </div>`);
 
   return `
