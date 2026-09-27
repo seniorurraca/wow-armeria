@@ -88,11 +88,13 @@ const SILHOUETTE = `
 
 // Con ?u=nick se muestra la ficha de ese espectador; sin parámetro, la landing con el ranking
 const viewerLogin = (new URLSearchParams(location.search).get('u') || '').toLowerCase();
+// Con ?subasta, la casa de subastas (ver subasta.js)
+const auctionMode = new URLSearchParams(location.search).has('subasta');
 
-// En la ficha, de la landing solo queda "Cómo participar" debajo del personaje
-if (viewerLogin) {
+// En la ficha, de la landing solo queda "Cómo participar" debajo del personaje; en la subasta, nada
+if (viewerLogin || auctionMode) {
   const landing = document.getElementById('landing');
-  landing.querySelectorAll('.hero, #redes, #armeria').forEach(section => section.hidden = true);
+  landing.querySelectorAll(auctionMode ? '.hero, #redes, #armeria, #participar' : '.hero, #redes, #armeria').forEach(section => section.hidden = true);
   landing.before(app);
   app.hidden = false;
   showStatus('Cargando la armería...');
@@ -103,7 +105,7 @@ loadArmory()
   .catch(err => {
     console.log('[Armería] No se pudo cargar', err);
     const text = 'No se pudo cargar la armería. Prueba de nuevo en un rato.';
-    if (viewerLogin) showStatus(text);
+    if (viewerLogin || auctionMode) showStatus(text);
     else renderRankingStatus(text);
   });
 
@@ -115,7 +117,8 @@ async function loadArmory() {
 }
 
 function render(armory) {
-  if (!viewerLogin) renderRanking(armory);
+  if (auctionMode) renderAuctionHouse(armory);
+  else if (!viewerLogin) renderRanking(armory);
   else if (armory.viewers[viewerLogin]) renderViewer(armory.viewers[viewerLogin], armory.achievements || []);
   else showStatus(`${viewerLogin} todavía no tiene botín. ¡Canjea un cofre en el stream!`, true);
 }
@@ -149,6 +152,7 @@ function renderViewer(viewer, achievements) {
     <nav class="tabs">
       ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
     </nav>
+    <a class="back" href="./?subasta&u=${encodeURIComponent(viewerLogin)}">Ir a la casa de subastas</a>
     <a class="back" href="./#armeria">Ver todos los aventureros</a>`;
 
   app.querySelectorAll('.tabs button').forEach(button =>
@@ -156,6 +160,7 @@ function renderViewer(viewer, achievements) {
   setupSpellbook(viewer);
   setupReforge(viewer);
   setupEquipButtons(viewer);
+  setupAuctionButtons(viewer);
   setupTitlePicker(viewer);
   showTab('character');
 }
@@ -171,6 +176,7 @@ function paperdoll(viewer, itemsById) {
   const items = uniqueItems(viewer);
   const stats = [
     ['GearScore', coloredGearScore(gearScore(viewer))],
+    ['Oro', moneyHtml(viewer.gold ?? 0)],
     ['Objetos', items.length],
     ['Equipados', Object.keys(viewer.equipped).length],
     ['Épicos', countRarity(items, 'epic')],
@@ -231,11 +237,12 @@ function inventory(viewer) {
         <span class="row-name item-name">${escapeHtml(item.name)}</span>
       </a>
       ${equipButton(item, viewer)}
+      ${auctionButton(item)}
     </div>`);
 
   return `
     ${bagBar(viewer, items.length)}
-    <p class="hint">Toca <b>Equipar</b> y pega el comando en el chat del stream (o escribe <code>!equipar nombre</code>).</p>
+    <p class="hint">Toca <b>Equipar</b> y pega el comando en el chat del stream (o escribe <code>!equipar nombre</code>). <b>Vender</b> lo pone en la casa de subastas; las bolsas se venden tocándolas.</p>
     ${reforgeBar()}
     <div class="list two-columns bag-list">${rows.join('') || '<p class="status">La mochila está vacía.</p>'}</div>`;
 }

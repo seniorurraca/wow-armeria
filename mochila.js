@@ -24,8 +24,8 @@ function bagBar(viewer, used) {
   const bags = viewer.bags || [];
   const free = Math.max(0, bagCapacity(viewer) - used);
   const waiting = viewer.items.filter(item => item.pending).length;
-  const bagSlot = (icon, slots, rarity) =>
-    `<span class="slot bag-slot" data-rarity="${rarity}" title="${slots} casillas"><img src="${escapeHtml(icon)}" alt=""><b class="count">${slots}</b></span>`;
+  const bagSlot = (icon, slots, rarity, id) =>
+    `<span class="slot bag-slot" data-rarity="${rarity}"${id ? ` data-id="${escapeHtml(id)}"` : ''} title="${slots} casillas${id ? ' · toca para venderla' : ''}"><img src="${escapeHtml(icon)}" alt=""><b class="count">${slots}</b></span>`;
   const emptySlots = Array.from({ length: MAX_BAGS - bags.length },
     () => `<span class="slot bag-slot empty" title="Casillero de bolsa vacío"><img src="${iconUrl('inventoryslot_bag')}" alt=""></span>`);
 
@@ -33,7 +33,7 @@ function bagBar(viewer, used) {
     <div class="bag-bar">
       <div class="bag-slots">
         ${bagSlot(iconUrl(BACKPACK_ICON), BACKPACK_SLOTS, 'common')}
-        ${bags.map(bag => bagSlot(bag.icon, bag.bagSlots, bag.rarity)).join('')}
+        ${bags.map(bag => bagSlot(bag.icon, bag.bagSlots, bag.rarity, bag.id)).join('')}
         ${emptySlots.join('')}
       </div>
       <span class="bag-free${free === 0 ? ' full' : ''}">Huecos libres: <b>${free}</b> / ${bagCapacity(viewer)}</span>
