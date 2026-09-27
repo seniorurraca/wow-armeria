@@ -152,6 +152,7 @@ function renderViewer(viewer, achievements) {
   app.querySelectorAll('.tabs button').forEach(button =>
     button.addEventListener('click', () => showTab(button.dataset.tab)));
   setupSpellbook(viewer);
+  setupReforge(viewer);
   showTab('character');
 }
 

@@ -1,0 +1,202 @@
+/* ---------- Reforja: elegir objetos en la pestaña Botín ---------- */
+
+.reforge-bar { margin-bottom: 10px; }
+
+.reforge-toggle,
+.reforge-go,
+.forge-button {
+  padding: 6px 14px;
+  border: 2px solid #1a1a1a;
+  border-radius: 5px;
+  background: linear-gradient(#8c1a10, #3d0703);
+  box-shadow: 0 0 0 1px #a8834a, inset 0 1px 0 rgba(255, 255, 255, .2);
+  color: var(--gold);
+  font: inherit;
+  text-shadow: var(--outline);
+  cursor: pointer;
+}
+
+.reforge-toggle:hover,
+.reforge-go:hover:not(:disabled),
+.forge-button:hover { filter: brightness(1.2); }
+
+.reforge-go:disabled {
+  background: linear-gradient(#3a3a3a, #1a1a1a);
+  color: #777;
+  cursor: default;
+}
+
+.reforge-panel { margin-top: 8px; }
+
+.reforge-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reforge-status { text-shadow: var(--outline); }
+
+.loot-list.picking .row { cursor: pointer; }
+.loot-list.picking .row.locked { opacity: .4; cursor: not-allowed; }
+
+.loot-list.picking .row.picked {
+  background: rgba(255, 209, 0, .12);
+  box-shadow: inset 0 0 0 1px var(--gold);
+}
+
+.loot-list.picking .row.picked .row-icon { box-shadow: 0 0 10px var(--rarity); }
+
+/* ---------- Ventana de la forja (espera y revelación) ---------- */
+
+.forge-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: radial-gradient(circle at 50% 45%, rgba(45, 22, 5, .95), rgba(0, 0, 0, .97));
+  animation: forge-fade .3s ease-out;
+}
+
+.forge-wait {
+  max-width: 420px;
+  text-align: center;
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.forge-anvil {
+  font-size: 56px;
+  animation: forge-hammer 1s ease-in-out infinite;
+}
+
+.forge-command {
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #000;
+  color: var(--gold);
+  font-size: 16px;
+  user-select: all;
+  word-break: break-all;
+}
+
+.forge-stage {
+  position: relative;
+  width: min(360px, 100%);
+  height: 360px;
+  display: grid;
+  place-items: center;
+}
+
+/* Los 3 materiales: tiemblan con cada martillazo y se juntan en el centro */
+.forge-materials { position: absolute; inset: 0; }
+
+.forge-material {
+  --slot: 56px;
+  position: absolute;
+  left: calc(50% - var(--slot) / 2 + (var(--i) - 1) * 90px);
+  top: calc(50% - var(--slot) / 2);
+  border: 2px solid var(--rarity);
+  border-radius: 6px;
+  box-shadow: 0 0 12px var(--rarity);
+  animation:
+    forge-shake .25s ease-in-out .25s 2 alternate,
+    forge-merge .6s ease-in 1.4s forwards;
+}
+
+.forge-material:nth-child(2) { animation-delay: .75s, 1.4s; }
+.forge-material:nth-child(3) { animation-delay: 1.25s, 1.4s; }
+
+.forge-flash {
+  position: absolute;
+  inset: -40%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, var(--rarity) 25%, transparent 60%);
+  opacity: 0;
+  animation: forge-flash .8s ease-out 2s forwards;
+  pointer-events: none;
+}
+
+.forge-result {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: forge-reveal .6s cubic-bezier(.2, 1.6, .4, 1) 2.15s forwards;
+}
+
+.forge-rays {
+  position: absolute;
+  top: -70px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, var(--rarity) 0deg 8deg, transparent 8deg 24deg);
+  mask: radial-gradient(circle, #000 20%, transparent 70%);
+  -webkit-mask: radial-gradient(circle, #000 20%, transparent 70%);
+  opacity: .55;
+  animation: forge-spin 8s linear infinite;
+  pointer-events: none;
+}
+
+.forge-item {
+  --slot: 80px;
+  position: relative;
+  border: 3px solid var(--rarity);
+  border-radius: 8px;
+  box-shadow: 0 0 24px var(--rarity), 0 0 60px var(--rarity);
+}
+
+.forge-title {
+  position: relative;
+  color: var(--gold);
+  font-size: 22px;
+  text-shadow: var(--outline);
+}
+
+.forge-name {
+  position: relative;
+  font-size: 18px;
+  text-shadow: var(--outline);
+}
+
+.forge-button { position: relative; margin-top: 6px; }
+
+@keyframes forge-fade { from { opacity: 0; } }
+
+@keyframes forge-hammer {
+  0%, 100% { transform: rotate(0); }
+  40% { transform: rotate(-25deg); }
+  55% { transform: rotate(8deg); }
+}
+
+@keyframes forge-shake {
+  from { transform: translate(-3px, 0) rotate(-4deg); filter: brightness(1); }
+  to { transform: translate(3px, -2px) rotate(4deg); filter: brightness(1.8); }
+}
+
+@keyframes forge-merge {
+  to {
+    left: calc(50% - var(--slot) / 2);
+    transform: scale(.3) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes forge-flash {
+  0% { opacity: 0; transform: scale(.2); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes forge-reveal {
+  from { opacity: 0; transform: scale(.3); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes forge-spin { to { transform: rotate(360deg); } }
