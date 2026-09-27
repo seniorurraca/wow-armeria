@@ -1,11 +1,11 @@
 // Reforja: en la pestaña Inventario el espectador elige 3 objetos de su mochila y la página le arma
 // "!reforjar id id id" para pegar en el chat. Streamer.bot (wow-armeria.cs) los funde en uno que su clase
-// pueda usar; la página espera a que aparezca en el gist y lo revela con animación y sonido.
+// pueda usar; la página se entera al instante por la API y lo revela con animación y sonido.
 const REFORGE_MATERIALS = 3;
 const REFORGE_RARITY_NAMES = { uncommon: 'Poco común', rare: 'Raro', epic: 'Épico' };
 // El botín de mazmorras va de verde a épico: las calidades fuera de ese rango caen en el borde (igual que wow-armeria.cs)
 const REFORGE_MIN_RANK = 2, REFORGE_MAX_RANK = 4;
-const REFORGE_POLL_MS = 10000, REFORGE_WAIT_MS = 180000;
+const REFORGE_WAIT_MS = 180000;
 const REFORGE_REVEAL_SOUND = 'https://wow.zamimg.com/sound-ids/live/enus/13/642829/UI_EpicLoot_Toast_01.ogg';
 // Golpes de martillo (ms desde que empieza la animación) y el momento en que se funden; coinciden con reforja.css
 const HAMMER_HITS_MS = [250, 750, 1250];
@@ -95,7 +95,7 @@ function reforgeOdds(rarities) {
 
 // ---------- Esperar a que Streamer.bot reforje ----------
 
-async function startReforge(viewer) {
+function startReforge(viewer) {
   const materials = reforgeSelection.map(row => ({
     id: row.dataset.id, rarity: row.dataset.rarity, icon: row.querySelector('img').src
   }));
@@ -113,23 +113,18 @@ async function startReforge(viewer) {
     </div>`);
   setupCopyButton(overlay, command);
 
-  let cancelled = false;
-  overlay.querySelector('.forge-button').addEventListener('click', () => { cancelled = true; overlay.remove(); });
+  const slowHint = setTimeout(() => {
+    overlay.querySelector('.hint').textContent = 'No llegó nada todavía. ¿Pegaste el comando en el chat?';
+  }, REFORGE_WAIT_MS);
+  const stopWaiting = () => { socket.close(); clearTimeout(slowHint); overlay.remove(); };
+  overlay.querySelector('.forge-button').addEventListener('click', stopWaiting);
 
-  const deadline = Date.now() + REFORGE_WAIT_MS;
-  while (!cancelled && Date.now() < deadline) {
-    await new Promise(resolve => setTimeout(resolve, REFORGE_POLL_MS));
-    if (cancelled) return;
-    const armory = await loadArmory().catch(() => null);
-    const updated = armory && armory.viewers[viewerLogin];
-    const forged = updated && updated.items.find(i => i.source === 'reforja' && !known.has(i.obtained));
-    if (forged) {
-      overlay.remove();
-      revealForge(materials, forged, () => { render(armory); showTab('inventory'); });
-      return;
-    }
-  }
-  if (!cancelled) overlay.querySelector('.hint').textContent = 'No llegó nada todavía. ¿Pegaste el comando en el chat?';
+  const socket = watchViewer(updated => {
+    const forged = updated.items.find(i => i.source === 'reforja' && !known.has(i.obtained));
+    if (!forged) return;
+    stopWaiting();
+    revealForge(materials, forged, () => loadArmory().then(armory => { render(armory); showTab('inventory'); }));
+  });
 }
 
 // ---------- Revelación: 3 martillazos, se funden y aparece el objeto nuevo ----------

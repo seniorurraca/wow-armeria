@@ -1,4 +1,4 @@
-// Pestaña "Logros" de la ficha. La lista viene del gist (definida en el C# de Streamer.bot)
+// Pestaña "Logros" de la ficha. La lista viene de la API (definida en el C# de Streamer.bot)
 function achievementList(viewer, achievements) {
   const earned = Object.fromEntries((viewer.achievements || []).map(a => [a.id, a.obtained]));
   const earnedCount = achievements.filter(a => earned[a.id]).length;
