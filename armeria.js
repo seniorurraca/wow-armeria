@@ -153,6 +153,7 @@ function renderViewer(viewer, achievements) {
     button.addEventListener('click', () => showTab(button.dataset.tab)));
   setupSpellbook(viewer);
   setupReforge(viewer);
+  setupEquipButtons();
   showTab('character');
 }
 
@@ -222,15 +223,34 @@ function inventory(viewer) {
     RARITIES.indexOf(b.rarity) - RARITIES.indexOf(a.rarity) || a.name.localeCompare(b.name));
 
   const rows = items.map(item => `
-    <a class="row" data-rarity="${item.rarity}" href="${itemUrl(item.id)}">
-      <span class="row-icon slot"><img src="${escapeHtml(item.icon)}" alt="">${item.count > 1 ? `<b class="count">${item.count}</b>` : ''}</span>
-      <span class="row-name item-name">${escapeHtml(item.name)}</span>
-      ${equipped.has(item.id) ? '<span class="row-meta equipped">Equipado</span>' : ''}
-    </a>`);
+    <div class="row" data-rarity="${item.rarity}">
+      <a class="row-link" href="${itemUrl(item.id)}">
+        <span class="row-icon slot"><img src="${escapeHtml(item.icon)}" alt="">${item.count > 1 ? `<b class="count">${item.count}</b>` : ''}</span>
+        <span class="row-name item-name">${escapeHtml(item.name)}</span>
+      </a>
+      ${equipped.has(item.id)
+        ? '<span class="row-meta equipped">Equipado</span>'
+        : item.slot ? `<button class="wow-button equip-button" type="button" data-command="!equipar ${escapeHtml(item.name)}">Equipar</button>` : ''}
+    </div>`);
 
   return `
-    <p class="hint">Equipa un objeto escribiendo <code>!equipar nombre</code> en el chat.</p>
+    <p class="hint">Toca <b>Equipar</b> para copiar el comando y pégalo en el chat del stream (o escribe <code>!equipar nombre</code>).</p>
     <div class="list two-columns">${rows.join('') || '<p class="status">La mochila está vacía.</p>'}</div>`;
+}
+
+const COPIED_MS = 2500;
+
+// "Equipar" copia "!equipar nombre" para pegarlo en el chat; si el navegador no deja copiar, lo muestra para copiarlo a mano
+function setupEquipButtons() {
+  app.querySelectorAll('.equip-button').forEach(button => button.addEventListener('click', () => {
+    const command = button.dataset.command;
+    navigator.clipboard.writeText(command)
+      .then(() => {
+        button.textContent = '¡Copiado! Pégalo en el chat';
+        setTimeout(() => { button.textContent = 'Equipar'; }, COPIED_MS);
+      })
+      .catch(() => window.prompt('Copia este comando y pégalo en el chat:', command));
+  }));
 }
 
 function spellbook() {

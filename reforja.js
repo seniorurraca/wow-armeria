@@ -17,12 +17,12 @@ let reforgeAudio = null;
 function reforgeBar() {
   return `
     <div class="reforge-bar">
-      <button class="reforge-toggle" type="button">⚒️ Reforjar objetos</button>
+      <button class="wow-button reforge-toggle" type="button">⚒️ Reforjar objetos</button>
       <div class="reforge-panel" hidden>
         <p class="hint">Elige ${REFORGE_MATERIALS} objetos de tu mochila que no uses. Se funden en uno que <b>tu clase</b> sí puede usar, de calidad y nivel parecidos al promedio.</p>
         <div class="reforge-footer">
           <span class="reforge-status"></span>
-          <button class="reforge-go" type="button" disabled>Reforjar</button>
+          <button class="wow-button reforge-go" type="button" disabled>Reforjar</button>
         </div>
       </div>
     </div>`;
@@ -111,7 +111,7 @@ async function startReforge(viewer) {
       <p>Comando copiado. Pégalo en el chat del stream:</p>
       <code class="forge-command">${escapeHtml(command)}</code>
       <p class="hint">Esperando a la forja…</p>
-      <button class="forge-button" type="button">Cancelar</button>
+      <button class="wow-button forge-button" type="button">Cancelar</button>
     </div>`);
 
   let cancelled = false;
@@ -155,7 +155,7 @@ function revealForge(materials, item, onClose) {
         <span class="slot forge-item"><img src="${escapeHtml(item.icon)}" alt=""></span>
         <p class="forge-title">¡Reforjado!</p>
         <a class="item-name forge-name" href="${itemUrl(item.id)}" target="_blank" rel="noopener">[${escapeHtml(item.name)}]</a>
-        <button class="forge-button" type="button">Continuar</button>
+        <button class="wow-button forge-button" type="button">Continuar</button>
       </div>
     </div>`);
 

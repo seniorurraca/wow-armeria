@@ -257,6 +257,43 @@ a { color: inherit; text-decoration: none; }
   color: var(--gold);
 }
 
+/* ---------- Botón rojo del juego (reforjar, equipar) ---------- */
+
+.wow-button {
+  padding: 6px 14px;
+  border: 2px solid #1a1a1a;
+  border-radius: 5px;
+  background: linear-gradient(#8c1a10, #3d0703);
+  box-shadow: 0 0 0 1px #a8834a, inset 0 1px 0 rgba(255, 255, 255, .2);
+  color: var(--gold);
+  font: inherit;
+  text-shadow: var(--outline);
+  cursor: pointer;
+}
+
+.wow-button:hover:not(:disabled) { filter: brightness(1.2); }
+
+.wow-button:disabled {
+  background: linear-gradient(#3a3a3a, #1a1a1a);
+  color: #777;
+  cursor: default;
+}
+
+/* Inventario: el nombre lleva a Wowhead y al lado va "Equipar", que copia el comando */
+.row-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.equip-button {
+  flex: none;
+  padding: 3px 8px;
+  font-size: 12px;
+}
+
 /* ---------- Libro de hechizos (pergamino) ---------- */
 
 .spellbook {

@@ -2,30 +2,6 @@
 
 .reforge-bar { margin-bottom: 10px; }
 
-.reforge-toggle,
-.reforge-go,
-.forge-button {
-  padding: 6px 14px;
-  border: 2px solid #1a1a1a;
-  border-radius: 5px;
-  background: linear-gradient(#8c1a10, #3d0703);
-  box-shadow: 0 0 0 1px #a8834a, inset 0 1px 0 rgba(255, 255, 255, .2);
-  color: var(--gold);
-  font: inherit;
-  text-shadow: var(--outline);
-  cursor: pointer;
-}
-
-.reforge-toggle:hover,
-.reforge-go:hover:not(:disabled),
-.forge-button:hover { filter: brightness(1.2); }
-
-.reforge-go:disabled {
-  background: linear-gradient(#3a3a3a, #1a1a1a);
-  color: #777;
-  cursor: default;
-}
-
 .reforge-panel { margin-top: 8px; }
 
 .reforge-footer {
