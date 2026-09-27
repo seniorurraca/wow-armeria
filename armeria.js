@@ -1,6 +1,5 @@
-// Gist donde Streamer.bot publica armory.json (ver streamerbot/README.md)
-const GIST_ID = 'daaf25602c520509b37eaf0b8e560a9a';
-const GIST_FILE = 'armory.json';
+// API donde Streamer.bot publica la armería (ver api/README.md)
+const API_URL = 'https://wow-armeria-api.wow-armeria-api.workers.dev';
 
 const CLASSES = {
   warrior: { name: 'Guerrero',  color: '#C79C6E' },
@@ -110,10 +109,17 @@ loadArmory()
   });
 
 async function loadArmory() {
-  const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
-  if (!res.ok) throw new Error(`GitHub respondió ${res.status}`);
-  const gist = await res.json();
-  return JSON.parse(gist.files[GIST_FILE].content);
+  const path = auctionMode ? 'auction' : viewerLogin ? 'viewer' : 'ranking';
+  const res = await fetch(`${API_URL}/${path}?u=${encodeURIComponent(viewerLogin)}`);
+  if (!res.ok) throw new Error(`La API respondió ${res.status}`);
+  return res.json();
+}
+
+// La API avisa al instante cada vez que Streamer.bot cambia la ficha de este espectador
+function watchViewer(onChange) {
+  const socket = new WebSocket(`${API_URL.replace(/^http/, 'ws')}/ws?u=${encodeURIComponent(viewerLogin)}`);
+  socket.addEventListener('message', event => onChange(JSON.parse(event.data).viewer));
+  return socket;
 }
 
 function render(armory) {

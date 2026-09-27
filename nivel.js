@@ -1,5 +1,5 @@
 // Nivel, barra de experiencia, marco del retrato y títulos. Los calcula Streamer.bot (wow-armeria.cs) y vienen
-// en el gist; acá solo se pintan y se arma el comando "!titulo" para pegar en el chat
+// en la API; acá solo se pintan y se arma el comando "!titulo" para pegar en el chat
 const MAX_LEVEL = 60;
 const NO_TITLE = 'ninguno';
 

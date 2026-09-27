@@ -1,4 +1,4 @@
-// El GearScore lo calcula Streamer.bot (wow-armeria.cs) y viene en el gist; acá solo se pinta.
+// El GearScore lo calcula Streamer.bot (wow-armeria.cs) y viene en la API; acá solo se pinta.
 // Colores estilo TacoTip, con degradé entre tramos. Escala de Classic: full T3 ronda los 1100
 const GEARSCORE_COLORS = [
   [0, [157, 157, 157]],
