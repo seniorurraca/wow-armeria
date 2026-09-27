@@ -225,7 +225,7 @@ function inventory(viewer) {
   const rows = items.map(item => `
     <div class="row" data-rarity="${item.rarity}">
       <a class="row-link" href="${itemUrl(item.id)}">
-        <span class="row-icon slot"><img src="${escapeHtml(item.icon)}" alt="">${item.count > 1 ? `<b class="count">${item.count}</b>` : ''}</span>
+        <span class="row-icon slot${unusableClass(item, viewer)}"><img src="${escapeHtml(item.icon)}" alt="">${item.count > 1 ? `<b class="count">${item.count}</b>` : ''}</span>
         <span class="row-name item-name">${escapeHtml(item.name)}</span>
       </a>
       ${equipped.has(item.id) ? '<span class="row-meta equipped">Equipado</span>' : equipButton(item, viewer)}

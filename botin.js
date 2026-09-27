@@ -15,7 +15,7 @@ function lootHistory(viewer) {
     return `
       <div class="row${equipped ? ' locked' : ''}" data-rarity="${item.rarity}" data-id="${escapeHtml(item.id)}">
         <a class="row-link" href="${itemUrl(item.id)}">
-          <span class="row-icon slot"><img src="${escapeHtml(item.icon)}" alt=""></span>
+          <span class="row-icon slot${unusableClass(item, viewer)}"><img src="${escapeHtml(item.icon)}" alt=""></span>
           <span class="row-name item-name">${escapeHtml(item.name)}</span>
         </a>
         <span class="row-meta${equipped ? ' equipped' : ''}">${equipped ? 'Equipado' : meta}</span>
