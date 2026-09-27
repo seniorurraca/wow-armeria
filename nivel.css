@@ -1,0 +1,89 @@
+/* ---------- Nivel: marco del retrato por nivel, barra de experiencia y títulos ---------- */
+
+.portrait[data-rarity],
+.row-icon[data-rarity] { border-color: var(--rarity); }
+
+[data-starred] { animation: star-glow 2s ease-in-out infinite; }
+
+@keyframes star-glow {
+  50% { box-shadow: 0 0 0 2px #000, 0 0 18px var(--rarity), 0 0 32px var(--rarity); }
+}
+
+/* Barra violeta de experiencia, como la del juego */
+.xp-bar {
+  position: relative;
+  height: 14px;
+  margin-top: 6px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  background: #1a1026;
+  box-shadow: 0 0 0 1px #5a4a1a;
+  overflow: hidden;
+}
+
+.xp-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(#b18cff, #5b2a9e);
+}
+
+.xp-bar small {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  text-shadow: var(--outline);
+}
+
+.title-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--gold);
+  font-size: 13px;
+  text-shadow: var(--outline);
+}
+
+.title-select {
+  min-width: 0;
+  max-width: 100%;
+  padding: 2px 6px;
+  border: 1px solid #5a4a1a;
+  border-radius: 4px;
+  background: #000;
+  color: #fff;
+  font: inherit;
+}
+
+.title-hint { margin: 6px 0 0; }
+
+.title-preview {
+  font-size: 24px;
+  color: var(--gold);
+  text-shadow: var(--outline);
+  animation: equip-pop .5s cubic-bezier(.2, 1.6, .4, 1);
+}
+
+/* Ranking: el nivel va en un circulito sobre el retrato */
+.row-portrait {
+  position: relative;
+  flex: none;
+}
+
+.level-badge {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  min-width: 18px;
+  padding: 0 3px;
+  border: 1px solid var(--gold);
+  border-radius: 9px;
+  background: #000;
+  color: var(--gold);
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+}
