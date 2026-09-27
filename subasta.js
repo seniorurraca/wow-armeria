@@ -206,11 +206,10 @@ function openBuyWindow(auction, viewer) {
       ${itemShowcase(item)}
       <p>Precio: ${moneyHtml(auction.price)}</p>
       ${short ? `<p class="ah-warning">Te falta oro: tienes ${moneyHtml(viewer.gold ?? 0)}</p>` : ''}
-      <p>Pega esto en el chat del stream para comprarlo:</p>
-      ${commandBox(command)}
+      ${commandBlock(command, 'comprarlo', 'Comprar')}
       <button class="wow-button close-button" type="button">Cerrar</button>
     </div>`);
-  setupCopyButton(overlay, command);
+  setupCommand(overlay, () => { overlay.remove(); loadArmory().then(render); });
   overlay.querySelector('.close-button').addEventListener('click', () => overlay.remove());
 }
 
@@ -311,9 +310,8 @@ function showVendorSale(detail, item) {
   const command = `!vendernpc ${item.id}`;
   detail.innerHTML = `
     <p class="hint">Recibes ${moneyHtml(item.sellPrice)} y el objeto se va para siempre (no hay recompra).</p>
-    <p>Pega esto en el chat del stream para vendérselo:</p>
-    ${commandBox(command)}`;
-  setupCopyButton(detail, command);
+    ${commandBlock(command, 'vendérselo', 'Vender')}`;
+  setupCommand(detail, () => detail.closest('.overlay').remove());
 }
 
 function showAuctionSale(detail, item, viewer) {
@@ -329,8 +327,8 @@ function showAuctionSale(detail, item, viewer) {
       <div><dt>Tu oro:</dt><dd>${moneyHtml(gold)}</dd></div>
     </dl>
     <p class="ah-warning sell-warning" hidden></p>
-    <p>Pega esto en el chat del stream para subastarlo:</p>
-    <div class="sell-command"></div>`;
+    ${commandBlock(`!vender ${item.id}`, 'subastarlo', 'Subastar')}`;
+  setupCommand(detail, () => detail.closest('.overlay').remove());
 
   const update = () => {
     const goldInput = Math.min(MAX_AUCTION_GOLD, Math.max(0, Math.floor(detail.querySelector('.sell-gold').value) || 0));
@@ -340,11 +338,10 @@ function showAuctionSale(detail, item, viewer) {
     const warning = detail.querySelector('.sell-warning');
     warning.hidden = price > 0 && gold >= deposit;
     warning.textContent = price === 0 ? 'Ponle un precio.' : 'No te alcanza el oro para el depósito.';
+    const action = detail.querySelector('.action-button');
+    if (action) action.disabled = !warning.hidden;
     detail.querySelector('.sell-deposit').innerHTML = moneyHtml(price ? deposit : 0);
-    const box = detail.querySelector('.sell-command');
-    const command = `!vender ${item.id} ${moneyCommand(price)}`;
-    box.innerHTML = commandBox(command);
-    setupCopyButton(box, command);
+    setCommand(detail, `!vender ${item.id} ${moneyCommand(price)}`);
   };
 
   detail.querySelectorAll('.sell-price input').forEach(input => input.addEventListener('input', update));

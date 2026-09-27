@@ -101,8 +101,9 @@ if (viewerLogin || auctionMode) {
   showStatus('Cargando la armería...');
 }
 
+// sessionReady (sesion.js): la ficha se dibuja sabiendo si el que mira inició sesión
 loadArmory()
-  .then(render)
+  .then(armory => sessionReady.then(() => render(armory)))
   .catch(err => {
     console.log('[Armería] No se pudo cargar', err);
     const text = 'No se pudo cargar la armería. Prueba de nuevo en un rato.';
@@ -280,7 +281,7 @@ function inventory(viewer) {
 
   return `
     ${bagBar(viewer, items.length)}
-    <p class="hint">Toca <b>Equipar</b> y pega el comando en el chat del stream (o escribe <code>!equipar nombre</code>). <b>Vender</b> lo pone en la casa de subastas; las bolsas se venden tocándolas.</p>
+    <p class="hint">${canActHere() ? 'Toca <b>Equipar</b> o <b>Vender</b> y listo' : 'Toca <b>Equipar</b> y pega el comando en el chat del stream (o escribe <code>!equipar nombre</code>), o entra con Twitch y hazlo con un clic'}. <b>Vender</b> lo da al vendedor o a la casa de subastas; las bolsas se venden tocándolas.</p>
     ${reforgeBar()}
     <div class="list two-columns bag-list">${rows.join('') || '<p class="status">La mochila está vacía.</p>'}</div>`;
 }

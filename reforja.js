@@ -106,15 +106,14 @@ function startReforge(viewer) {
   const overlay = showOverlay(`
     <div class="overlay-window">
       <div class="forge-anvil">⚒️</div>
-      <p>Pega esto en el chat del stream:</p>
-      ${commandBox(command)}
-      <p class="hint">Esperando a la forja…</p>
+      ${commandBlock(command, 'reforjarlos', 'Reforjar')}
+      <p class="hint forge-hint">Esperando a la forja…</p>
       <button class="wow-button forge-button" type="button">Cancelar</button>
     </div>`);
-  setupCopyButton(overlay, command);
+  setupCommand(overlay);
 
   const slowHint = setTimeout(() => {
-    overlay.querySelector('.hint').textContent = 'No llegó nada todavía. ¿Pegaste el comando en el chat?';
+    overlay.querySelector('.forge-hint').textContent = 'No llegó nada todavía. ¿Pegaste el comando en el chat?';
   }, REFORGE_WAIT_MS);
   const stopWaiting = () => { stopWatching(); clearTimeout(slowHint); overlay.remove(); };
   overlay.querySelector('.forge-button').addEventListener('click', stopWaiting);

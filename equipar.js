@@ -1,5 +1,5 @@
-// Botón "Equipar" (pestaña Inventario): abre una ventana con el objeto brillando y el comando
-// "!equipar nombre" para pegar en el chat. Streamer.bot (wow-armeria.cs) lo equipa si su clase lo puede usar
+// Botón "Equipar" (pestaña Inventario): abre una ventana con el objeto brillando y "!equipar nombre"
+// (botón directo con la sesión de Twitch, o el comando para pegar en el chat). La API lo equipa si su clase lo puede usar
 
 // Solo objetos que se equipan, que su clase puede usar y que no lleva puestos
 function equipButton(item, viewer) {
@@ -22,11 +22,10 @@ function openEquipWindow(item) {
         <span class="slot equip-icon"><img src="${escapeHtml(item.icon)}" alt=""></span>
       </div>
       <a class="item-name equip-name" href="${itemUrl(item.id)}" target="_blank" rel="noopener">[${escapeHtml(item.name)}]</a>
-      <p>Pega esto en el chat del stream para equipártelo:</p>
-      ${commandBox(command)}
+      ${commandBlock(command, 'equipártelo', 'Equipar')}
       <button class="wow-button close-button" type="button">Cerrar</button>
     </div>`);
 
-  setupCopyButton(overlay, command);
+  setupCommand(overlay, () => overlay.remove());
   overlay.querySelector('.close-button').addEventListener('click', () => overlay.remove());
 }
