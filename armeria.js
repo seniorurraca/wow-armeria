@@ -1,5 +1,7 @@
 // API donde Streamer.bot publica la armería (ver api/README.md)
 const API_URL = 'https://wow-armeria-api.wow-armeria-api.workers.dev';
+const RECONNECT_MS = 3000;
+let viewerAchievements = [];
 
 const CLASSES = {
   warrior: { name: 'Guerrero',  color: '#C79C6E' },
@@ -115,18 +117,46 @@ async function loadArmory() {
   return res.json();
 }
 
-// La API avisa al instante cada vez que Streamer.bot cambia la ficha de este espectador
-function watchViewer(onChange) {
+// La API avisa al instante cada vez que Streamer.bot cambia la ficha de este espectador.
+// Si se corta, se reconecta y recarga por si algo cambió mientras tanto
+const viewerListeners = new Set();
+
+function connectViewerSocket() {
   const socket = new WebSocket(`${API_URL.replace(/^http/, 'ws')}/ws?u=${encodeURIComponent(viewerLogin)}`);
-  socket.addEventListener('message', event => onChange(JSON.parse(event.data).viewer));
-  return socket;
+  socket.addEventListener('message', event => {
+    const viewer = JSON.parse(event.data).viewer;
+    viewerListeners.forEach(listener => listener(viewer));
+  });
+  socket.addEventListener('close', () => setTimeout(() => {
+    connectViewerSocket();
+    loadArmory().then(armory => armory.viewers[viewerLogin] && refreshViewer(armory.viewers[viewerLogin])).catch(() => {});
+  }, RECONNECT_MS));
+}
+
+function watchViewer(onChange) {
+  viewerListeners.add(onChange);
+  return () => viewerListeners.delete(onChange);
+}
+
+if (viewerLogin && !auctionMode) {
+  connectViewerSocket();
+  watchViewer(refreshViewer);
 }
 
 function render(armory) {
   if (auctionMode) renderAuctionHouse(armory);
   else if (!viewerLogin) renderRanking(armory);
-  else if (armory.viewers[viewerLogin]) renderViewer(armory.viewers[viewerLogin], armory.achievements || []);
+  else if (armory.viewers[viewerLogin]) {
+    viewerAchievements = armory.achievements || [];
+    renderViewer(armory.viewers[viewerLogin]);
+  }
   else showStatus(`${viewerLogin} todavía no tiene botín. ¡Canjea un cofre en el stream!`, true);
+}
+
+// Vuelve a dibujar la ficha con lo nuevo sin sacar al espectador de la pestaña donde está
+function refreshViewer(viewer) {
+  const activeTab = app.querySelector('.tabs button.active');
+  renderViewer(viewer, activeTab ? activeTab.dataset.tab : 'character');
 }
 
 function showStatus(text, withBack) {
@@ -136,7 +166,7 @@ function showStatus(text, withBack) {
 
 // ---------- Personaje ----------
 
-function renderViewer(viewer, achievements) {
+function renderViewer(viewer, tab = 'character') {
   const cls = classOf(viewer);
   const itemsById = Object.fromEntries(viewer.items.map(item => [item.id, item]));
 
@@ -153,7 +183,7 @@ function renderViewer(viewer, achievements) {
       <div class="panel" data-tab="inventory" hidden>${inventory(viewer)}</div>
       <div class="panel" data-tab="loot" hidden>${lootHistory(viewer)}</div>
       <div class="panel" data-tab="spells" hidden>${spellbook()}</div>
-      <div class="panel" data-tab="achievements" hidden>${achievementList(viewer, achievements)}</div>
+      <div class="panel" data-tab="achievements" hidden>${achievementList(viewer, viewerAchievements)}</div>
     </section>
     <nav class="tabs">
       ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
@@ -169,7 +199,7 @@ function renderViewer(viewer, achievements) {
   setupSellButtons(viewer);
   setupPagedLists(app);
   setupTitlePicker(viewer);
-  showTab('character');
+  showTab(tab);
   fixPanelHeight(app.querySelector('.frame'));
 }
 

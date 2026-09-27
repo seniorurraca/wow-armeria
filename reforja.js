@@ -116,14 +116,15 @@ function startReforge(viewer) {
   const slowHint = setTimeout(() => {
     overlay.querySelector('.hint').textContent = 'No llegó nada todavía. ¿Pegaste el comando en el chat?';
   }, REFORGE_WAIT_MS);
-  const stopWaiting = () => { socket.close(); clearTimeout(slowHint); overlay.remove(); };
+  const stopWaiting = () => { stopWatching(); clearTimeout(slowHint); overlay.remove(); };
   overlay.querySelector('.forge-button').addEventListener('click', stopWaiting);
 
-  const socket = watchViewer(updated => {
+  // La ficha ya se redibuja sola con el objeto nuevo (armeria.js); acá solo se revela y se vuelve a Inventario
+  const stopWatching = watchViewer(updated => {
     const forged = updated.items.find(i => i.source === 'reforja' && !known.has(i.obtained));
     if (!forged) return;
     stopWaiting();
-    revealForge(materials, forged, () => loadArmory().then(armory => { render(armory); showTab('inventory'); }));
+    revealForge(materials, forged, () => showTab('inventory'));
   });
 }
 
