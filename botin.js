@@ -1,6 +1,6 @@
 // Pestaña "Botín": historial de todo lo ganado (objetos y bolsas), del más nuevo al más viejo, con su origen y fecha.
 // Los guardados antes de registrar la fecha van al final, sin ella. Solo se mira: equipar y reforjar van en Inventario
-const ITEM_SOURCES = { cofre: 'Cofre', tirada: 'Loot de raid', mazmorra: 'Mazmorra', reforja: 'Reforja' };
+const ITEM_SOURCES = { cofre: 'Cofre', tirada: 'Loot de raid', mazmorra: 'Mazmorra', reforja: 'Reforja', subasta: 'Subasta' };
 
 // Hasta que Streamer.bot guarde el historial, se muestra lo que tiene
 function lootHistory(viewer) {

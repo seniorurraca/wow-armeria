@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="landing.css">
   <link rel="stylesheet" href="reforja.css">
   <link rel="stylesheet" href="equipar.css">
+  <link rel="stylesheet" href="subasta.css">
   <link rel="stylesheet" href="nivel.css">
   <script>const whTooltips = { colorLinks: false, iconizeLinks: false, renameLinks: false };</script>
   <script src="https://wow.zamimg.com/js/tooltips.js"></script>
@@ -28,6 +29,7 @@
       <nav class="topnav">
         <a href="./#armeria">Armería</a>
         <a href="./#participar">Cómo participar</a>
+        <a href="./?subasta">Subasta</a>
         <a href="https://www.youtube.com/@SeniorUrraca" target="_blank" rel="noopener">YouTube</a>
         <a href="https://discord.gg/p6gaYsqgcp" target="_blank" rel="noopener">Discord</a>
       </nav>
@@ -84,6 +86,10 @@
           <img src="https://wow.zamimg.com/images/wow/icons/large/ability_dualwield.jpg" alt="">
           <span><strong>Duelo</strong><small>Canjéalo escribiendo a quién retas. Si acepta con <code>!aceptar</code>, gana la mejor tirada (+ bonus por tu equipo). Si no se anima, te devuelve los puntos.</small></span>
         </div>
+        <a class="card reward" href="./?subasta">
+          <img src="https://wow.zamimg.com/images/wow/icons/large/inv_misc_coin_02.jpg" alt="">
+          <span><strong>Oro y subasta</strong><small>Empiezas con 25 de oro y ganas más en cofres y mazmorras. Vende lo que no uses y compra lo de otros en la casa de subastas.</small></span>
+        </a>
       </div>
 
       <div class="dungeon">
@@ -114,6 +120,8 @@
         <div><code>!desequipar nombre</code><span>Lo vuelve a la mochila</span></div>
         <div><code>!reforjar</code><span>Funde 3 objetos que no uses en uno para tu clase (elígelos en la pestaña Inventario de tu armería)</span></div>
         <div><code>!titulo nombre</code><span>Usa un título que desbloqueaste (elígelo en tu armería)</span></div>
+        <div><code>!vender id precio</code><span>Pone un objeto verde, azul, épico o una bolsa en la casa de subastas por 24 h (cuesta el 5% del precio; elígelo en la pestaña Inventario)</span></div>
+        <div><code>!comprar n°</code><span>Compra una subasta con tu oro (búscala en la <a href="./?subasta">casa de subastas</a>)</span></div>
         <div><code>!join</code><span>Unirte al grupo de una mazmorra</span></div>
         <div><code>!need · !greed · !pass</code><span>Tirar por el loot de raid</span></div>
         <div><code>!aceptar</code><span>Aceptar un duelo</span></div>
@@ -154,6 +162,8 @@
   <script src="clase.js"></script>
   <script src="mochila.js"></script>
   <script src="equipar.js"></script>
+  <script src="oro.js"></script>
+  <script src="subasta.js"></script>
   <script src="nivel.js"></script>
   <script src="botin.js"></script>
   <script src="reforja.js"></script>
