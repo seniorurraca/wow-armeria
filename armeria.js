@@ -218,22 +218,23 @@ function countRarity(items, rarity) {
 }
 
 function inventory(viewer) {
-  const equipped = new Set(Object.values(viewer.equipped));
-  const items = uniqueItems(viewer).sort((a, b) =>
+  const items = bagItems(viewer).sort((a, b) =>
     RARITIES.indexOf(b.rarity) - RARITIES.indexOf(a.rarity) || a.name.localeCompare(b.name));
 
   const rows = items.map(item => `
-    <div class="row" data-rarity="${item.rarity}">
+    <div class="row" data-rarity="${item.rarity}" data-id="${escapeHtml(item.id)}">
       <a class="row-link" href="${itemUrl(item.id)}">
-        <span class="row-icon slot${unusableClass(item, viewer)}"><img src="${escapeHtml(item.icon)}" alt="">${item.count > 1 ? `<b class="count">${item.count}</b>` : ''}</span>
+        <span class="row-icon slot${unusableClass(item, viewer)}"><img src="${escapeHtml(item.icon)}" alt=""></span>
         <span class="row-name item-name">${escapeHtml(item.name)}</span>
       </a>
-      ${equipped.has(item.id) ? '<span class="row-meta equipped">Equipado</span>' : equipButton(item, viewer)}
+      ${equipButton(item, viewer)}
     </div>`);
 
   return `
+    ${bagBar(viewer, items.length)}
     <p class="hint">Toca <b>Equipar</b> y pega el comando en el chat del stream (o escribe <code>!equipar nombre</code>).</p>
-    <div class="list two-columns">${rows.join('') || '<p class="status">La mochila está vacía.</p>'}</div>`;
+    ${reforgeBar()}
+    <div class="list two-columns bag-list">${rows.join('') || '<p class="status">La mochila está vacía.</p>'}</div>`;
 }
 
 function spellbook() {

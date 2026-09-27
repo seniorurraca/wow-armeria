@@ -1,27 +1,26 @@
-// Pestaña "Botín": cada objeto ganado, del más nuevo al más viejo, con su origen y fecha.
-// Los guardados antes de registrar la fecha van al final, sin ella. Desde acá se eligen los objetos para reforjar
+// Pestaña "Botín": historial de todo lo ganado (objetos y bolsas), del más nuevo al más viejo, con su origen y fecha.
+// Los guardados antes de registrar la fecha van al final, sin ella. Solo se mira: equipar y reforjar van en Inventario
 const ITEM_SOURCES = { cofre: 'Cofre', tirada: 'Loot de raid', mazmorra: 'Mazmorra', reforja: 'Reforja' };
 
+// Hasta que Streamer.bot guarde el historial, se muestra lo que tiene
 function lootHistory(viewer) {
-  const items = [...viewer.items].sort((a, b) => (b.obtained || '').localeCompare(a.obtained || ''));
-  // Las copias equipadas no se pueden reforjar: se marcan tantas como casilleros ocupa ese objeto
-  const worn = {};
-  Object.values(viewer.equipped).forEach(id => worn[id] = (worn[id] || 0) + 1);
+  const entries = [...(viewer.loot || viewer.items)].sort((a, b) => (b.obtained || '').localeCompare(a.obtained || ''));
 
-  const rows = items.map(item => {
-    const equipped = worn[item.id] > 0;
-    if (equipped) worn[item.id]--;
-    const meta = [item.instance || ITEM_SOURCES[item.source], item.obtained && formatDate(item.obtained)].filter(Boolean).join(' · ');
+  const rows = entries.map(item => {
+    const meta = [
+      item.bagSlots && `Bolsa de ${item.bagSlots}`,
+      item.instance || ITEM_SOURCES[item.source],
+      item.obtained && formatDate(item.obtained)
+    ].filter(Boolean).join(' · ');
     return `
-      <div class="row${equipped ? ' locked' : ''}" data-rarity="${item.rarity}" data-id="${escapeHtml(item.id)}">
+      <div class="row" data-rarity="${item.rarity}">
         <a class="row-link" href="${itemUrl(item.id)}">
-          <span class="row-icon slot${unusableClass(item, viewer)}"><img src="${escapeHtml(item.icon)}" alt=""></span>
+          <span class="row-icon slot"><img src="${escapeHtml(item.icon)}" alt=""></span>
           <span class="row-name item-name">${escapeHtml(item.name)}</span>
         </a>
-        <span class="row-meta${equipped ? ' equipped' : ''}">${equipped ? 'Equipado' : meta}</span>
-        ${equipButton(item, viewer)}
+        <span class="row-meta">${meta}</span>
       </div>`;
   });
 
-  return `${reforgeBar()}<div class="list loot-list">${rows.join('') || '<p class="status">Todavía no ganó botín.</p>'}</div>`;
+  return `<div class="list history">${rows.join('') || '<p class="status">Todavía no ganó botín.</p>'}</div>`;
 }

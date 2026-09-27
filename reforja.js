@@ -1,4 +1,4 @@
-// Reforja: en la pestaña Botín el espectador elige 3 objetos de su mochila y la página le arma
+// Reforja: en la pestaña Inventario el espectador elige 3 objetos de su mochila y la página le arma
 // "!reforjar id id id" para pegar en el chat. Streamer.bot (wow-armeria.cs) los funde en uno que su clase
 // pueda usar; la página espera a que aparezca en el gist y lo revela con animación y sonido.
 const REFORGE_MATERIALS = 3;
@@ -31,7 +31,7 @@ function reforgeBar() {
 function setupReforge(viewer) {
   reforgeSelection = [];
   const panel = app.querySelector('.reforge-panel');
-  const list = app.querySelector('.loot-list');
+  const list = app.querySelector('.bag-list');
   if (!panel || !list) return;
 
   app.querySelector('.reforge-toggle').addEventListener('click', () => {
@@ -45,7 +45,6 @@ function setupReforge(viewer) {
     const row = event.target.closest('.row');
     if (!row || !list.classList.contains('picking')) return;
     event.preventDefault();
-    if (row.classList.contains('locked')) return;
     toggleReforgeRow(row);
   });
 
@@ -126,7 +125,7 @@ async function startReforge(viewer) {
     const forged = updated && updated.items.find(i => i.source === 'reforja' && !known.has(i.obtained));
     if (forged) {
       overlay.remove();
-      revealForge(materials, forged, () => { render(armory); showTab('loot'); });
+      revealForge(materials, forged, () => { render(armory); showTab('inventory'); });
       return;
     }
   }

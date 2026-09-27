@@ -1,4 +1,4 @@
-/* ---------- Reforja: elegir objetos en la pestaña Botín ---------- */
+/* ---------- Reforja: elegir objetos en la pestaña Inventario ---------- */
 
 .reforge-bar { margin-bottom: 10px; }
 
@@ -14,16 +14,15 @@
 
 .reforge-status { text-shadow: var(--outline); }
 
-.loot-list.picking .row { cursor: pointer; }
-.loot-list.picking .equip-button { display: none; }
-.loot-list.picking .row.locked { opacity: .4; cursor: not-allowed; }
+.bag-list.picking .row { cursor: pointer; }
+.bag-list.picking .equip-button { display: none; }
 
-.loot-list.picking .row.picked {
+.bag-list.picking .row.picked {
   background: rgba(255, 209, 0, .12);
   box-shadow: inset 0 0 0 1px var(--gold);
 }
 
-.loot-list.picking .row.picked .row-icon { box-shadow: 0 0 10px var(--rarity); }
+.bag-list.picking .row.picked .row-icon { box-shadow: 0 0 10px var(--rarity); }
 
 /* ---------- Ventana de la forja (espera y revelación; la ventana y los rayos están en armeria.css) ---------- */
 
