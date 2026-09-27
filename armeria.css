@@ -243,6 +243,29 @@ a { color: inherit; text-decoration: none; }
 }
 .row-meta.equipped { color: var(--gold); }
 
+/* Inventario: mochila + 4 casilleros de bolsa y huecos libres */
+.bag-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.bag-slots { display: flex; gap: 4px; }
+.bag-slot { --slot: 36px; }
+.bag-free { text-shadow: var(--outline); color: #ddd; }
+.bag-free b { color: #fff; }
+.bag-free.full b { color: #FF4040; }
+.bag-waiting { color: #FF8080; }
+
+/* Botín: en pantallas chicas el origen y la fecha van debajo del nombre */
+@media (max-width: 720px) {
+  .history .row { flex-wrap: wrap; }
+  .history .row-meta { display: block; flex-basis: 100%; padding-left: 44px; }
+}
+
 .item-name { color: var(--rarity); }
 .spell-name { color: var(--gold); }
 

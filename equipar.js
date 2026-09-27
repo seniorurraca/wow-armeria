@@ -1,9 +1,9 @@
-// Botón "Equipar" (pestañas Inventario y Botín): abre una ventana con el objeto brillando y el comando
+// Botón "Equipar" (pestaña Inventario): abre una ventana con el objeto brillando y el comando
 // "!equipar nombre" para pegar en el chat. Streamer.bot (wow-armeria.cs) lo equipa si su clase lo puede usar
 
-// Solo objetos que se equipan y que no lleva puestos
+// Solo objetos que se equipan, que su clase puede usar y que no lleva puestos
 function equipButton(item, viewer) {
-  if (!item.slot || Object.values(viewer.equipped).includes(item.id)) return '';
+  if (!item.slot || !classCanUse(item, viewer.class) || Object.values(viewer.equipped).includes(item.id)) return '';
   return `<button class="wow-button equip-button" type="button" data-id="${escapeHtml(item.id)}">Equipar</button>`;
 }
 
