@@ -69,6 +69,39 @@ code {
 .topnav a { color: var(--text-soft); }
 .topnav a:hover { color: var(--button); }
 
+/* ---------- Sesión con Twitch ---------- */
+
+.session-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 180px;
+  margin-right: 10px;
+  padding: 7px 14px;
+  border: 1px solid #9146ff;
+  border-radius: 999px;
+  background: rgba(145, 70, 255, .15);
+  color: #fff;
+  white-space: nowrap;
+}
+
+.session-pill:hover { background: rgba(145, 70, 255, .3); }
+.session-pill.logged-in { padding: 4px 12px 4px 4px; border-color: var(--line); background: none; color: var(--text-soft); }
+.session-pill img { width: 26px; height: 26px; border-radius: 50%; }
+.session-pill span { overflow: hidden; text-overflow: ellipsis; }
+
+.session-logout {
+  margin-right: 10px;
+  border: 0;
+  background: none;
+  color: #7d7867;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.session-logout:hover { color: var(--button); }
+
 /* ---------- Indicador en vivo ---------- */
 
 .live-pill {
@@ -380,6 +413,13 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
 
 @media (max-width: 720px) {
   .topnav { display: none; }
+  .brand { gap: 8px; }
+  .session-pill, .session-logout { margin-right: 4px; }
+  .session-logout { font-size: 12px; }
+  .session-pill.logged-in span { display: none; }
+  .session-pill.logged-in { padding: 4px; }
+  .session-pill { padding: 7px 12px; }
+  .session-long { display: none; }
   .hero { min-height: 70vh; }
   .hero::after {
     background:
