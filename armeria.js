@@ -161,8 +161,10 @@ function renderViewer(viewer, achievements) {
   setupReforge(viewer);
   setupEquipButtons(viewer);
   setupAuctionButtons(viewer);
+  setupPagedLists(app);
   setupTitlePicker(viewer);
   showTab('character');
+  fixPanelHeight(app.querySelector('.frame'));
 }
 
 function showTab(tab) {
