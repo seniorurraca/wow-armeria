@@ -75,4 +75,26 @@ function setupCopyButton(block) {
   });
 }
 
+// El objeto brillando con los rayos de su calidad (equipar, desequipar, vender, comprar)
+function itemShowcase(item) {
+  return `
+    <div class="equip-showcase">
+      <div class="rays"></div>
+      <span class="slot equip-icon"><img src="${escapeHtml(item.icon)}" alt=""></span>
+    </div>
+    <a class="item-name equip-name" href="${itemUrl(item.id)}" target="_blank" rel="noopener">[${escapeHtml(item.name)}]</a>`;
+}
+
+// Ventana con el objeto y una sola acción (equipar, desequipar)
+function openItemWindow(item, command, purpose, label) {
+  const overlay = showOverlay(`
+    <div class="overlay-window equip-window" data-rarity="${item.rarity}">
+      ${itemShowcase(item)}
+      ${commandBlock(command, purpose, label)}
+      <button class="wow-button close-button" type="button">Cerrar</button>
+    </div>`);
+  setupCommand(overlay, () => overlay.remove());
+  overlay.querySelector('.close-button').addEventListener('click', () => overlay.remove());
+}
+
 const capitalize = text => text.charAt(0).toUpperCase() + text.slice(1);

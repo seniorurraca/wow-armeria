@@ -242,7 +242,7 @@ function slotHtml(slot, item) {
   if (!item) {
     return `<span class="slot empty" title="${SLOTS[slot].label}"><img src="${iconUrl(`inventoryslot_${SLOTS[slot].icon}`)}" alt=""></span>`;
   }
-  return `<a class="slot" data-rarity="${item.rarity}" href="${itemUrl(item.id)}"><img src="${escapeHtml(item.icon)}" alt=""></a>`;
+  return `<span class="worn-slot"><a class="slot" data-rarity="${item.rarity}" href="${itemUrl(item.id)}"><img src="${escapeHtml(item.icon)}" alt=""></a>${unequipButton(item)}</span>`;
 }
 
 // ---------- Inventario y hechizos ----------
