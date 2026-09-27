@@ -34,24 +34,72 @@
   50% { box-shadow: 0 0 40px var(--rarity), 0 0 80px var(--rarity); }
 }
 
-/* 🎒 sobre lo equipado (pestaña Personaje): aparece al pasar el mouse; en pantallas táctiles, siempre */
+/* Pestaña Personaje: flechita al costado de lo equipado (como la del WoW) que despliega "Desequipar objeto" */
 .worn-slot { position: relative; flex: none; }
+.worn-slot.open { z-index: 2; }
+
+.flyout-arrow {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 10px;
+  height: 100%;
+  padding: 0;
+  border: 1px solid #000;
+  border-left: 0;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(90deg, #3b2a14, #140d05);
+  cursor: pointer;
+}
+.flyout-arrow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  margin-top: -4px;
+  border: 4px solid transparent;
+  border-right: 0;
+  border-left: 5px solid var(--gold);
+}
+.flyout-arrow:hover, .open .flyout-arrow { filter: brightness(1.5); }
+.slots.bottom .flyout-arrow {
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  border: 1px solid #000;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(#3b2a14, #140d05);
+}
+.slots.bottom .flyout-arrow::after {
+  top: 2px;
+  left: 50%;
+  margin: 0 0 0 -4px;
+  border: 4px solid transparent;
+  border-bottom: 0;
+  border-top: 5px solid var(--gold);
+}
+
 .unequip-button {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  border: 1px solid var(--gold);
-  border-radius: 50%;
-  background: #1a1208;
-  font-size: 11px;
-  line-height: 18px;
+  top: 50%;
+  left: calc(100% + 12px);
+  display: none;
+  padding: 5px 12px;
+  border: 1px solid #a8834a;
+  border-radius: 3px;
+  background: linear-gradient(#3b2a14, #140d05);
+  box-shadow: 0 0 0 1px #000, inset 0 1px 0 rgba(255, 255, 255, .15), 0 2px 6px rgba(0, 0, 0, .8);
+  color: #f0d9a0;
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  text-shadow: var(--outline);
   cursor: pointer;
-  opacity: 0;
-  transition: opacity .15s;
+  transform: translateY(-50%);
 }
-.worn-slot:hover .unequip-button,
-.unequip-button:focus-visible { opacity: 1; }
-@media (hover: none) { .unequip-button { opacity: 1; } }
+.open .unequip-button { display: block; }
+.slots.right .unequip-button { left: auto; right: 100%; margin-right: 2px; }
+.slots.bottom .unequip-button { top: auto; bottom: 100%; left: 50%; margin-bottom: 2px; transform: translateX(-50%); }
+.unequip-button:hover { filter: brightness(1.3); }
