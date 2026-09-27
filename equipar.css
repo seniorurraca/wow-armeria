@@ -34,13 +34,58 @@
   50% { box-shadow: 0 0 40px var(--rarity), 0 0 80px var(--rarity); }
 }
 
-/* "Desequipar objeto" sale del costado de lo equipado (pestaña Personaje) al pasar el mouse; en pantallas táctiles, una ✕ fija */
+/* Pestaña Personaje: flechita al costado de lo equipado (como la del WoW) que despliega "Desequipar objeto" */
 .worn-slot { position: relative; flex: none; }
-.worn-slot:hover, .worn-slot:focus-within { z-index: 2; }
+.worn-slot.open { z-index: 2; }
+
+.flyout-arrow {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 10px;
+  height: 100%;
+  padding: 0;
+  border: 1px solid #000;
+  border-left: 0;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(90deg, #3b2a14, #140d05);
+  cursor: pointer;
+}
+.flyout-arrow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  margin-top: -4px;
+  border: 4px solid transparent;
+  border-right: 0;
+  border-left: 5px solid var(--gold);
+}
+.flyout-arrow:hover, .open .flyout-arrow { filter: brightness(1.5); }
+.slots.bottom .flyout-arrow {
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  border: 1px solid #000;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(#3b2a14, #140d05);
+}
+.slots.bottom .flyout-arrow::after {
+  top: 2px;
+  left: 50%;
+  margin: 0 0 0 -4px;
+  border: 4px solid transparent;
+  border-bottom: 0;
+  border-top: 5px solid var(--gold);
+}
+
 .unequip-button {
   position: absolute;
   top: 50%;
-  left: 100%;
+  left: calc(100% + 12px);
+  display: none;
   padding: 5px 12px;
   border: 1px solid #a8834a;
   border-radius: 3px;
@@ -53,32 +98,8 @@
   text-shadow: var(--outline);
   cursor: pointer;
   transform: translateY(-50%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .15s;
 }
-.slots.right .unequip-button { left: auto; right: 100%; }
-.slots.bottom .unequip-button { top: auto; bottom: 100%; left: 50%; transform: translateX(-50%); }
+.open .unequip-button { display: block; }
+.slots.right .unequip-button { left: auto; right: 100%; margin-right: 2px; }
+.slots.bottom .unequip-button { top: auto; bottom: 100%; left: 50%; margin-bottom: 2px; transform: translateX(-50%); }
 .unequip-button:hover { filter: brightness(1.3); }
-.worn-slot:hover .unequip-button,
-.unequip-button:focus-visible { opacity: 1; pointer-events: auto; }
-
-@media (hover: none) {
-  .unequip-button,
-  .slots.right .unequip-button,
-  .slots.bottom .unequip-button {
-    top: -6px;
-    right: -6px;
-    bottom: auto;
-    left: auto;
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    border-radius: 50%;
-    font-size: 0;
-    transform: none;
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .unequip-button::after { content: '✕'; font-size: 11px; }
-}
