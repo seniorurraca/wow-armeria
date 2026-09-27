@@ -15,6 +15,7 @@
 .reforge-status { text-shadow: var(--outline); }
 
 .loot-list.picking .row { cursor: pointer; }
+.loot-list.picking .equip-button { display: none; }
 .loot-list.picking .row.locked { opacity: .4; cursor: not-allowed; }
 
 .loot-list.picking .row.picked {
@@ -24,40 +25,11 @@
 
 .loot-list.picking .row.picked .row-icon { box-shadow: 0 0 10px var(--rarity); }
 
-/* ---------- Ventana de la forja (espera y revelación) ---------- */
-
-.forge-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  background: radial-gradient(circle at 50% 45%, rgba(45, 22, 5, .95), rgba(0, 0, 0, .97));
-  animation: forge-fade .3s ease-out;
-}
-
-.forge-wait {
-  max-width: 420px;
-  text-align: center;
-  display: grid;
-  gap: 10px;
-  justify-items: center;
-}
+/* ---------- Ventana de la forja (espera y revelación; la ventana y los rayos están en armeria.css) ---------- */
 
 .forge-anvil {
   font-size: 56px;
   animation: forge-hammer 1s ease-in-out infinite;
-}
-
-.forge-command {
-  padding: 6px 10px;
-  border-radius: 4px;
-  background: #000;
-  color: var(--gold);
-  font-size: 16px;
-  user-select: all;
-  word-break: break-all;
 }
 
 .forge-stage {
@@ -106,19 +78,7 @@
   animation: forge-reveal .6s cubic-bezier(.2, 1.6, .4, 1) 2.15s forwards;
 }
 
-.forge-rays {
-  position: absolute;
-  top: -70px;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: repeating-conic-gradient(from 0deg, var(--rarity) 0deg 8deg, transparent 8deg 24deg);
-  mask: radial-gradient(circle, #000 20%, transparent 70%);
-  -webkit-mask: radial-gradient(circle, #000 20%, transparent 70%);
-  opacity: .55;
-  animation: forge-spin 8s linear infinite;
-  pointer-events: none;
-}
+.forge-rays { top: -70px; }
 
 .forge-item {
   --slot: 80px;
@@ -142,8 +102,6 @@
 }
 
 .forge-button { position: relative; margin-top: 6px; }
-
-@keyframes forge-fade { from { opacity: 0; } }
 
 @keyframes forge-hammer {
   0%, 100% { transform: rotate(0); }
@@ -175,4 +133,3 @@
   to { opacity: 1; transform: none; }
 }
 
-@keyframes forge-spin { to { transform: rotate(360deg); } }

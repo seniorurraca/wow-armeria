@@ -13,11 +13,14 @@ function lootHistory(viewer) {
     if (equipped) worn[item.id]--;
     const meta = [item.instance || ITEM_SOURCES[item.source], item.obtained && formatDate(item.obtained)].filter(Boolean).join(' · ');
     return `
-      <a class="row${equipped ? ' locked' : ''}" data-rarity="${item.rarity}" data-id="${escapeHtml(item.id)}" href="${itemUrl(item.id)}">
-        <span class="row-icon slot"><img src="${escapeHtml(item.icon)}" alt=""></span>
-        <span class="row-name item-name">${escapeHtml(item.name)}</span>
+      <div class="row${equipped ? ' locked' : ''}" data-rarity="${item.rarity}" data-id="${escapeHtml(item.id)}">
+        <a class="row-link" href="${itemUrl(item.id)}">
+          <span class="row-icon slot"><img src="${escapeHtml(item.icon)}" alt=""></span>
+          <span class="row-name item-name">${escapeHtml(item.name)}</span>
+        </a>
         <span class="row-meta${equipped ? ' equipped' : ''}">${equipped ? 'Equipado' : meta}</span>
-      </a>`;
+        ${equipButton(item, viewer)}
+      </div>`;
   });
 
   return `${reforgeBar()}<div class="list loot-list">${rows.join('') || '<p class="status">Todavía no ganó botín.</p>'}</div>`;

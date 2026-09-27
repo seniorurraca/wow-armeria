@@ -1,4 +1,4 @@
-// Reforja: en la pestaña Botín el espectador elige 3 objetos de su mochila y la página le copia
+// Reforja: en la pestaña Botín el espectador elige 3 objetos de su mochila y la página le arma
 // "!reforjar id id id" para pegar en el chat. Streamer.bot (wow-armeria.cs) los funde en uno que su clase
 // pueda usar; la página espera a que aparezca en el gist y lo revela con animación y sonido.
 const REFORGE_MATERIALS = 3;
@@ -102,17 +102,17 @@ async function startReforge(viewer) {
   }));
   const command = `!reforjar ${materials.map(m => m.id).join(' ')}`;
   reforgeAudio = reforgeAudio || new (window.AudioContext || window.webkitAudioContext)();
-  navigator.clipboard.writeText(command).catch(() => {});
 
   const known = new Set(viewer.items.filter(i => i.source === 'reforja').map(i => i.obtained));
-  const overlay = showForgeOverlay(`
-    <div class="forge-wait">
+  const overlay = showOverlay(`
+    <div class="overlay-window">
       <div class="forge-anvil">⚒️</div>
-      <p>Comando copiado. Pégalo en el chat del stream:</p>
-      <code class="forge-command">${escapeHtml(command)}</code>
+      <p>Pega esto en el chat del stream:</p>
+      ${commandBox(command)}
       <p class="hint">Esperando a la forja…</p>
       <button class="wow-button forge-button" type="button">Cancelar</button>
     </div>`);
+  setupCopyButton(overlay, command);
 
   let cancelled = false;
   overlay.querySelector('.forge-button').addEventListener('click', () => { cancelled = true; overlay.remove(); });
@@ -133,25 +133,17 @@ async function startReforge(viewer) {
   if (!cancelled) overlay.querySelector('.hint').textContent = 'No llegó nada todavía. ¿Pegaste el comando en el chat?';
 }
 
-function showForgeOverlay(markup) {
-  const overlay = document.createElement('div');
-  overlay.className = 'forge-overlay';
-  overlay.innerHTML = markup;
-  document.body.appendChild(overlay);
-  return overlay;
-}
-
 // ---------- Revelación: 3 martillazos, se funden y aparece el objeto nuevo ----------
 
 function revealForge(materials, item, onClose) {
-  const overlay = showForgeOverlay(`
+  const overlay = showOverlay(`
     <div class="forge-stage" data-rarity="${item.rarity}">
       <div class="forge-materials">
         ${materials.map((m, i) => `<span class="slot forge-material" data-rarity="${m.rarity}" style="--i:${i}"><img src="${escapeHtml(m.icon)}" alt=""></span>`).join('')}
       </div>
       <div class="forge-flash"></div>
       <div class="forge-result">
-        <div class="forge-rays"></div>
+        <div class="rays forge-rays"></div>
         <span class="slot forge-item"><img src="${escapeHtml(item.icon)}" alt=""></span>
         <p class="forge-title">¡Reforjado!</p>
         <a class="item-name forge-name" href="${itemUrl(item.id)}" target="_blank" rel="noopener">[${escapeHtml(item.name)}]</a>

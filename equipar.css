@@ -1,0 +1,35 @@
+/* ---------- Ventana de equipar: el objeto aparece con rayos de su calidad y un brillo que late ---------- */
+
+.equip-showcase {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: grid;
+  place-items: center;
+}
+
+.equip-icon {
+  --slot: 80px;
+  position: relative;
+  border: 3px solid var(--rarity);
+  border-radius: 8px;
+  box-shadow: 0 0 24px var(--rarity);
+  animation:
+    equip-pop .5s cubic-bezier(.2, 1.6, .4, 1),
+    equip-glow 1.8s ease-in-out .5s infinite;
+}
+
+.equip-name {
+  font-size: 20px;
+  text-shadow: var(--outline);
+}
+
+.equip-window .close-button { margin-top: 6px; }
+
+@keyframes equip-pop {
+  from { opacity: 0; transform: scale(.3) rotate(-12deg); }
+}
+
+@keyframes equip-glow {
+  50% { box-shadow: 0 0 40px var(--rarity), 0 0 80px var(--rarity); }
+}

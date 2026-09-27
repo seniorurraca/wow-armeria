@@ -279,7 +279,7 @@ a { color: inherit; text-decoration: none; }
   cursor: default;
 }
 
-/* Inventario: el nombre lleva a Wowhead y al lado va "Equipar", que copia el comando */
+/* Inventario y Botín: el nombre lleva a Wowhead y al lado va "Equipar" */
 .row-link {
   display: flex;
   align-items: center;
@@ -293,6 +293,63 @@ a { color: inherit; text-decoration: none; }
   padding: 3px 8px;
   font-size: 12px;
 }
+
+/* ---------- Ventana encima de la página (equipar, reforjar) ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: radial-gradient(circle at 50% 45%, rgba(45, 22, 5, .95), rgba(0, 0, 0, .97));
+  animation: overlay-fade .3s ease-out;
+}
+
+.overlay-window {
+  max-width: 420px;
+  text-align: center;
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+/* El comando para pegar en el chat, con su botón Copiar */
+.command-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.command-text {
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #000;
+  color: var(--gold);
+  font-size: 16px;
+  user-select: all;
+  overflow-wrap: anywhere;
+}
+
+/* Rayos del color de la calidad girando detrás de un objeto */
+.rays {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, var(--rarity) 0deg 8deg, transparent 8deg 24deg);
+  mask: radial-gradient(circle, #000 20%, transparent 70%);
+  -webkit-mask: radial-gradient(circle, #000 20%, transparent 70%);
+  opacity: .55;
+  animation: spin 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes overlay-fade { from { opacity: 0; } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- Libro de hechizos (pergamino) ---------- */
 
