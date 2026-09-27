@@ -1,9 +1,10 @@
-// Casa de subastas (./?subasta, con &u=nick muestra tu oro y tus subastas) y ventana "Vender" del Inventario.
-// La página arma "!vender id precio" y "!comprar n°" para pegar en el chat; Streamer.bot (wow-armeria.cs) mueve oro y objetos
+// Casa de subastas (./?subasta, con &u=nick muestra tu oro y tus subastas) y ventana "Vender" del Inventario (vendedor NPC o subasta).
+// La página arma "!vendernpc id", "!vender id precio" y "!comprar n°" para pegar en el chat; Streamer.bot (wow-armeria.cs) mueve oro y objetos
 const AUCTION_HOURS = 24;
 const AUCTION_DEPOSIT_PERCENT = 5;
 const AUCTION_RARITIES = ['uncommon', 'rare', 'epic'];
 const AUCTIONEER_ICON = 'inv_misc_coin_02';
+const VENDOR_ICON = 'inv_misc_bag_10';
 const MAX_AUCTION_GOLD = 100000;
 const RARITY_NAMES = { uncommon: 'Poco común', rare: 'Raro', epic: 'Épico' };
 
@@ -202,11 +203,7 @@ function openBuyWindow(auction, viewer) {
   const short = viewer && (viewer.gold ?? 0) < auction.price;
   const overlay = showOverlay(`
     <div class="overlay-window equip-window" data-rarity="${item.rarity}">
-      <div class="equip-showcase">
-        <div class="rays"></div>
-        <span class="slot equip-icon"><img src="${escapeHtml(item.icon)}" alt=""></span>
-      </div>
-      <a class="item-name equip-name" href="${itemUrl(item.id)}" target="_blank" rel="noopener">[${escapeHtml(item.name)}]</a>
+      ${itemShowcase(item)}
       <p>Precio: ${moneyHtml(auction.price)}</p>
       ${short ? `<p class="ah-warning">Te falta oro: tienes ${moneyHtml(viewer.gold ?? 0)}</p>` : ''}
       <p>Pega esto en el chat del stream para comprarlo:</p>
@@ -252,61 +249,104 @@ function setupNickForm() {
   });
 }
 
-// ---------- Vender desde el Inventario ----------
+// ---------- Vender desde el Inventario: al vendedor NPC (al instante, precio de Wowhead) o en la subasta ----------
 
-function auctionButton(item) {
-  if (!canAuction(item)) return '';
-  return `<button class="wow-button auction-button" type="button" data-id="${escapeHtml(item.id)}">Vender</button>`;
+const canSell = item => item.rarity !== 'legendary';
+
+function sellButton(item) {
+  if (!canSell(item)) return '';
+  return `<button class="wow-button sell-button" type="button" data-id="${escapeHtml(item.id)}">Vender</button>`;
 }
 
 // Filas del Inventario y casilleros de bolsa (las bolsas se venden tocándolas)
-function setupAuctionButtons(viewer) {
+function setupSellButtons(viewer) {
   const byId = Object.fromEntries([...viewer.items, ...(viewer.bags || [])].map(item => [item.id, item]));
-  app.querySelectorAll('.auction-button, .bag-slot[data-id]').forEach(el =>
+  app.querySelectorAll('.sell-button, .bag-slot[data-id]').forEach(el =>
     el.addEventListener('click', () => openSellWindow(byId[el.dataset.id], viewer)));
 }
 
+// El objeto brillando con los rayos de su calidad (ventanas de vender y comprar)
+function itemShowcase(item) {
+  return `
+    <div class="equip-showcase">
+      <div class="rays"></div>
+      <span class="slot equip-icon"><img src="${escapeHtml(item.icon)}" alt=""></span>
+    </div>
+    <a class="item-name equip-name" href="${itemUrl(item.id)}" target="_blank" rel="noopener">[${escapeHtml(item.name)}]</a>`;
+}
+
+// Primero se elige a quién venderlo; recién ahí aparece el comando
 function openSellWindow(item, viewer) {
-  const gold = viewer.gold ?? 0;
-  const start = suggestedPrice(item);
+  const vendorProblem = item.sellPrice === undefined ? 'Todavía no se leyó su precio de venta'
+    : item.sellPrice === 0 ? 'El vendedor no lo compra' : '';
+  const auctionProblem = canAuction(item) ? '' : 'Solo verdes, azules, épicos y bolsas';
+  const choice = (key, icon, label, detail, problem) => `
+    <button class="sell-choice" type="button" data-choice="${key}"${problem ? ' disabled' : ''}>
+      <img src="${iconUrl(icon)}" alt="">
+      <span><strong>${label}</strong><small>${problem || detail}</small></span>
+    </button>`;
+
   const overlay = showOverlay(`
     <div class="overlay-window equip-window sell-window" data-rarity="${item.rarity}">
-      <div class="equip-showcase">
-        <div class="rays"></div>
-        <span class="slot equip-icon"><img src="${escapeHtml(item.icon)}" alt=""></span>
+      ${itemShowcase(item)}
+      <p>¿A quién se lo vendes?</p>
+      <div class="sell-choices">
+        ${choice('vendor', VENDOR_ICON, 'Vendedor', `Al instante por ${moneyHtml(item.sellPrice || 0)}`, vendorProblem)}
+        ${choice('auction', AUCTIONEER_ICON, 'Subasta', 'Tú pones el precio, dura 24 h', auctionProblem)}
       </div>
-      <a class="item-name equip-name" href="${itemUrl(item.id)}" target="_blank" rel="noopener">[${escapeHtml(item.name)}]</a>
-      <div class="sell-price">
-        <label><input class="sell-gold" type="number" min="0" max="${MAX_AUCTION_GOLD}" value="${Math.floor(start / COPPER_PER_GOLD)}"><span class="coin gold"></span></label>
-        <label><input class="sell-silver" type="number" min="0" max="99" value="0"><span class="coin silver"></span></label>
-      </div>
-      <dl class="sell-summary">
-        <div><dt>Duración:</dt><dd>${AUCTION_HOURS} horas</dd></div>
-        <div><dt>Depósito (${AUCTION_DEPOSIT_PERCENT}%):</dt><dd class="sell-deposit"></dd></div>
-        <div><dt>Tu oro:</dt><dd>${moneyHtml(gold)}</dd></div>
-      </dl>
-      <p class="ah-warning sell-warning" hidden></p>
-      <p>Pega esto en el chat del stream para subastarlo:</p>
-      <div class="sell-command"></div>
+      <div class="sell-detail"></div>
       <button class="wow-button close-button" type="button">Cerrar</button>
     </div>`);
 
+  const detail = overlay.querySelector('.sell-detail');
+  overlay.querySelectorAll('.sell-choice').forEach(button => button.addEventListener('click', () => {
+    overlay.querySelectorAll('.sell-choice').forEach(b => b.classList.toggle('active', b === button));
+    if (button.dataset.choice === 'vendor') showVendorSale(detail, item);
+    else showAuctionSale(detail, item, viewer);
+  }));
+  overlay.querySelector('.close-button').addEventListener('click', () => overlay.remove());
+}
+
+function showVendorSale(detail, item) {
+  const command = `!vendernpc ${item.id}`;
+  detail.innerHTML = `
+    <p class="hint">Recibes ${moneyHtml(item.sellPrice)} y el objeto se va para siempre (no hay recompra).</p>
+    <p>Pega esto en el chat del stream para vendérselo:</p>
+    ${commandBox(command)}`;
+  setupCopyButton(detail, command);
+}
+
+function showAuctionSale(detail, item, viewer) {
+  const gold = viewer.gold ?? 0;
+  detail.innerHTML = `
+    <div class="sell-price">
+      <label><input class="sell-gold" type="number" min="0" max="${MAX_AUCTION_GOLD}" value="${Math.floor(suggestedPrice(item) / COPPER_PER_GOLD)}"><span class="coin gold"></span></label>
+      <label><input class="sell-silver" type="number" min="0" max="99" value="0"><span class="coin silver"></span></label>
+    </div>
+    <dl class="sell-summary">
+      <div><dt>Duración:</dt><dd>${AUCTION_HOURS} horas</dd></div>
+      <div><dt>Depósito (${AUCTION_DEPOSIT_PERCENT}%):</dt><dd class="sell-deposit"></dd></div>
+      <div><dt>Tu oro:</dt><dd>${moneyHtml(gold)}</dd></div>
+    </dl>
+    <p class="ah-warning sell-warning" hidden></p>
+    <p>Pega esto en el chat del stream para subastarlo:</p>
+    <div class="sell-command"></div>`;
+
   const update = () => {
-    const goldInput = Math.min(MAX_AUCTION_GOLD, Math.max(0, Math.floor(overlay.querySelector('.sell-gold').value) || 0));
-    const silverInput = Math.min(99, Math.max(0, Math.floor(overlay.querySelector('.sell-silver').value) || 0));
+    const goldInput = Math.min(MAX_AUCTION_GOLD, Math.max(0, Math.floor(detail.querySelector('.sell-gold').value) || 0));
+    const silverInput = Math.min(99, Math.max(0, Math.floor(detail.querySelector('.sell-silver').value) || 0));
     const price = goldInput * COPPER_PER_GOLD + silverInput * COPPER_PER_SILVER;
     const deposit = auctionDeposit(price);
-    const warning = overlay.querySelector('.sell-warning');
+    const warning = detail.querySelector('.sell-warning');
     warning.hidden = price > 0 && gold >= deposit;
     warning.textContent = price === 0 ? 'Ponle un precio.' : 'No te alcanza el oro para el depósito.';
-    overlay.querySelector('.sell-deposit').innerHTML = moneyHtml(price ? deposit : 0);
-    const box = overlay.querySelector('.sell-command');
+    detail.querySelector('.sell-deposit').innerHTML = moneyHtml(price ? deposit : 0);
+    const box = detail.querySelector('.sell-command');
     const command = `!vender ${item.id} ${moneyCommand(price)}`;
     box.innerHTML = commandBox(command);
     setupCopyButton(box, command);
   };
 
-  overlay.querySelectorAll('.sell-price input').forEach(input => input.addEventListener('input', update));
-  overlay.querySelector('.close-button').addEventListener('click', () => overlay.remove());
+  detail.querySelectorAll('.sell-price input').forEach(input => input.addEventListener('input', update));
   update();
 }
