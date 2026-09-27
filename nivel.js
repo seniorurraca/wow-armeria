@@ -51,11 +51,10 @@ function openTitleWindow(viewer, title) {
   const overlay = showOverlay(`
     <div class="overlay-window title-window">
       <p class="title-preview">${escapeHtml(title ? title.replace('%s', viewer.name) : viewer.name)}</p>
-      <p>Pega esto en el chat del stream para ${title ? 'usar este título' : 'quitarte el título'}:</p>
-      ${commandBox(command)}
+      ${commandBlock(command, title ? 'usar este título' : 'quitarte el título', title ? 'Usar título' : 'Quitar título')}
       <button class="wow-button close-button" type="button">Cerrar</button>
     </div>`);
 
-  setupCopyButton(overlay, command);
+  setupCommand(overlay, () => overlay.remove());
   overlay.querySelector('.close-button').addEventListener('click', () => overlay.remove());
 }

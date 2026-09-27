@@ -1,6 +1,8 @@
 // "Iniciar sesión con Twitch": la API hace el intercambio con Twitch y vuelve con #sesion=... en la URL.
 // La sesión (30 días) queda en este navegador; se verifica contra la API al abrir la página
 const SESSION_KEY = 'armeriaSesion';
+// Quien inició sesión ({ login, name, avatar }), cuando la API lo confirma
+let signedInUser = null;
 
 function storedSession() {
   try { return localStorage.getItem(SESSION_KEY); } catch (err) { return null; }
@@ -37,7 +39,7 @@ function renderSession(user) {
     pill.innerHTML = `<img src="${escapeHtml(user.avatar || '')}" alt=""><span>${escapeHtml(user.name)}</span>`;
     pill.title = 'Mi armería';
   } else {
-    pill.href = `${API_URL}/auth/login?return=${encodeURIComponent(location.origin + location.pathname + location.search)}`;
+    pill.href = loginUrl();
     pill.innerHTML = 'Entrar<span class="session-long"> con Twitch</span>';
     pill.removeAttribute('title');
   }
@@ -46,11 +48,36 @@ function renderSession(user) {
   logout.hidden = !user;
 }
 
-const sessionToken = takeSessionFromUrl() || storedSession();
-const currentUser = sessionUser(sessionToken);
-currentUser.then(renderSession);
+function loginUrl() {
+  return `${API_URL}/auth/login?return=${encodeURIComponent(location.origin + location.pathname + location.search)}`;
+}
 
-document.getElementById('session-logout').addEventListener('click', () => {
+// "!equipar Espada" → la API lo hace con quien inició sesión. { ok, problems }
+async function runCommand(command) {
+  const [name, ...input] = command.split(' ');
+  const res = await fetch(`${API_URL}/action`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${sessionToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ command: name, input: input.join(' ') })
+  }).catch(() => null);
+  if (!res) return { ok: false, problems: ['no se pudo conectar con la armería. Prueba de nuevo.'] };
+  if (res.status === 401) {
+    signOut();
+    return { ok: false, problems: ['tu sesión venció: vuelve a entrar con Twitch.'] };
+  }
+  return res.json();
+}
+
+function signOut() {
   storeSession(null);
+  signedInUser = null;
   renderSession(null);
+}
+
+const sessionToken = takeSessionFromUrl() || storedSession();
+const sessionReady = sessionUser(sessionToken).then(user => {
+  signedInUser = user;
+  renderSession(user);
 });
+
+document.getElementById('session-logout').addEventListener('click', signOut);
