@@ -264,16 +264,6 @@ function setupSellButtons(viewer) {
     el.addEventListener('click', () => openSellWindow(byId[el.dataset.id], viewer)));
 }
 
-// El objeto brillando con los rayos de su calidad (ventanas de vender y comprar)
-function itemShowcase(item) {
-  return `
-    <div class="equip-showcase">
-      <div class="rays"></div>
-      <span class="slot equip-icon"><img src="${escapeHtml(item.icon)}" alt=""></span>
-    </div>
-    <a class="item-name equip-name" href="${itemUrl(item.id)}" target="_blank" rel="noopener">[${escapeHtml(item.name)}]</a>`;
-}
-
 // Primero se elige a quién venderlo; recién ahí aparece el comando
 function openSellWindow(item, viewer) {
   const vendorProblem = item.sellPrice === undefined ? 'Todavía no se leyó su precio de venta'
