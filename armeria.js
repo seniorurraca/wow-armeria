@@ -182,6 +182,7 @@ function renderViewer(viewer, tab = 'character') {
             <p class="subtitle">${levelText(viewer)} ${cls.name}</p>
             ${xpBar(viewer)}
             ${titlePicker(viewer)}
+            ${rolePicker(viewer)}
           </header>
           <div class="panel" data-tab="character">${paperdoll(viewer, itemsById)}</div>
           <div class="panel" data-tab="inventory" hidden>${inventory(viewer)}</div>
@@ -206,6 +207,7 @@ function renderViewer(viewer, tab = 'character') {
   setupSellButtons(viewer);
   setupPagedLists(app);
   setupTitlePicker(viewer);
+  setupRolePicker(viewer);
   initChat();
   showTab(tab);
   fixPanelHeight(app.querySelector('.frame'));
