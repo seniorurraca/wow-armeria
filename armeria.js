@@ -172,25 +172,30 @@ function renderViewer(viewer, tab = 'character') {
   const itemsById = Object.fromEntries(viewer.items.map(item => [item.id, item]));
 
   app.innerHTML = `
-    <section class="frame" style="--class-color:${cls.color}">
-      <header class="frame-title">
-        <img class="portrait" ${frameAttributes(viewer)} src="${portrait(viewer)}" alt="">
-        <h1>${escapeHtml(titledName(viewer))}</h1>
-        <p class="subtitle">${levelText(viewer)} ${cls.name}</p>
-        ${xpBar(viewer)}
-        ${titlePicker(viewer)}
-      </header>
-      <div class="panel" data-tab="character">${paperdoll(viewer, itemsById)}</div>
-      <div class="panel" data-tab="inventory" hidden>${inventory(viewer)}</div>
-      <div class="panel" data-tab="loot" hidden>${lootHistory(viewer)}</div>
-      <div class="panel" data-tab="spells" hidden>${spellbook()}</div>
-      <div class="panel" data-tab="achievements" hidden>${achievementList(viewer, viewerAchievements)}</div>
-    </section>
-    <nav class="tabs">
-      ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
-    </nav>
-    <a class="back" href="./?subasta&u=${encodeURIComponent(viewerLogin)}">Ir a la casa de subastas</a>
-    <a class="back" href="./#armeria">Ver todos los aventureros</a>`;
+    <div class="chat-viewer-container">
+      <div>
+        <section class="frame" style="--class-color:${cls.color}">
+          <header class="frame-title">
+            <img class="portrait" ${frameAttributes(viewer)} src="${portrait(viewer)}" alt="">
+            <h1>${escapeHtml(titledName(viewer))}</h1>
+            <p class="subtitle">${levelText(viewer)} ${cls.name}</p>
+            ${xpBar(viewer)}
+            ${titlePicker(viewer)}
+          </header>
+          <div class="panel" data-tab="character">${paperdoll(viewer, itemsById)}</div>
+          <div class="panel" data-tab="inventory" hidden>${inventory(viewer)}</div>
+          <div class="panel" data-tab="loot" hidden>${lootHistory(viewer)}</div>
+          <div class="panel" data-tab="spells" hidden>${spellbook()}</div>
+          <div class="panel" data-tab="achievements" hidden>${achievementList(viewer, viewerAchievements)}</div>
+        </section>
+        <nav class="tabs">
+          ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
+        </nav>
+        <a class="back" href="./?subasta&u=${encodeURIComponent(viewerLogin)}">Ir a la casa de subastas</a>
+        <a class="back" href="./#armeria">Ver todos los aventureros</a>
+      </div>
+      <div class="chat-panel">${renderChatArea()}</div>
+    </div>`;
 
   app.querySelectorAll('.tabs button').forEach(button =>
     button.addEventListener('click', () => showTab(button.dataset.tab)));
@@ -200,6 +205,7 @@ function renderViewer(viewer, tab = 'character') {
   setupSellButtons(viewer);
   setupPagedLists(app);
   setupTitlePicker(viewer);
+  initChat();
   showTab(tab);
   fixPanelHeight(app.querySelector('.frame'));
 }
