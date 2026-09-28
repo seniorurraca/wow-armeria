@@ -95,7 +95,8 @@ const auctionMode = new URLSearchParams(location.search).has('subasta');
 // En la ficha, de la landing solo queda "Cómo participar" debajo del personaje; en la subasta, nada
 if (viewerLogin || auctionMode) {
   const landing = document.getElementById('landing');
-  landing.querySelectorAll(auctionMode ? '.hero, #redes, #armeria, #participar' : '.hero, #redes, #armeria').forEach(section => section.hidden = true);
+  const landingOnly = '.hero, #redes, #armeria, #noticias, #preguntas, #sugerencias';
+  landing.querySelectorAll(auctionMode ? `${landingOnly}, #participar` : landingOnly).forEach(section => section.hidden = true);
   landing.before(app);
   app.hidden = false;
   showStatus('Cargando la armería...');

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="armeria.css?v=20260927g">
-  <link rel="stylesheet" href="landing.css?v=20260927g">
+  <link rel="stylesheet" href="landing.css?v=20260927j">
   <link rel="stylesheet" href="reforja.css?v=20260927g">
   <link rel="stylesheet" href="equipar.css?v=20260927i">
   <link rel="stylesheet" href="subasta.css?v=20260927g">
@@ -30,6 +30,8 @@
         <a href="./#armeria">Armería</a>
         <a href="./#participar">Cómo participar</a>
         <a href="./?subasta">Subasta</a>
+        <a href="./#noticias">Noticias</a>
+        <a href="./#preguntas">Preguntas</a>
         <a href="https://www.youtube.com/@SeniorUrraca" target="_blank" rel="noopener">YouTube</a>
         <a href="https://discord.gg/p6gaYsqgcp" target="_blank" rel="noopener">Discord</a>
       </nav>
@@ -134,6 +136,77 @@
       </div>
     </section>
 
+    <section class="section" id="noticias">
+      <h2>Noticias de WoW Forever</h2>
+      <p class="section-text">Lo último de <a class="text-link" href="https://www.wowhead.com/news" target="_blank" rel="noopener">Wowhead</a> sobre WoW Forever (en inglés).</p>
+      <div class="news" id="news-list"><p class="status">Cargando noticias...</p></div>
+    </section>
+
+    <section class="section" id="preguntas">
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        <details>
+          <summary>¿Es seguro entrar con Twitch?</summary>
+          <p>Sí. El inicio de sesión es el oficial de Twitch: escribes tu contraseña en twitch.tv, nunca en esta página, y nosotros nunca la vemos. La armería solo pide permiso para saber tu nombre de usuario y tu avatar, lo mismo que ve cualquiera en tu perfil. No puede escribir en el chat por ti, seguir canales, ver tu email ni gastar tus puntos.</p>
+          <p>La sesión queda guardada en tu navegador por 30 días. Puedes cerrarla con <b>Salir</b> arriba a la derecha, y quitarle el acceso cuando quieras desde <a class="text-link" href="https://www.twitch.tv/settings/connections" target="_blank" rel="noopener">Twitch → Configuración → Conexiones</a>.</p>
+        </details>
+        <details>
+          <summary>¿Qué puedo hacer con la sesión iniciada?</summary>
+          <p>En tu propia ficha, equipar, vender, subastar, comprar, reforjar y elegir título con un clic, sin escribir comandos. También escribir en el chat de la armería y dejar sugerencias. Sin sesión puedes ver todo, y los botones te dan el comando para pegar en el chat del stream.</p>
+        </details>
+        <details>
+          <summary>¿Cómo consigo mi personaje?</summary>
+          <p>Canjea cualquier recompensa del canal (un cofre, por ejemplo) y tu ficha se crea sola con tu nombre de Twitch. Elige tu clase con <code>!clase</code> (por ejemplo <code>!clase mago</code>). Cambiarla después solo te hace olvidar los hechizos: el equipo y el oro se quedan.</p>
+        </details>
+        <details>
+          <summary>¿Cómo consigo oro?</summary>
+          <p>Empiezas con 3 de oro. Después ganas más abriendo cofres (el de nivel 1-54 da entre 2 y 6 de oro, el de 55-60 entre 10 y 25), terminando mazmorras y bandas, y vendiendo lo que no uses al vendedor o en la subasta.</p>
+        </details>
+        <details>
+          <summary>¿Cómo vendo un objeto?</summary>
+          <p>Hay dos formas, las dos desde la pestaña <b>Inventario</b> de tu ficha (o con comandos):</p>
+          <ul>
+            <li><b>Al vendedor NPC</b> (<code>!vendernpc</code>): cobras al instante lo que paga el vendedor del juego por ese objeto. Sirve para cualquier objeto de la mochila menos los legendarios.</li>
+            <li><b>En la casa de subastas</b> (<code>!vender</code>): tú pones el precio y otro espectador lo compra con su oro. Mira abajo cómo funciona.</li>
+          </ul>
+          <p>Lo que tienes equipado no se puede vender: primero desequípalo.</p>
+        </details>
+        <details>
+          <summary>¿Cómo funciona la casa de subastas?</summary>
+          <p>Puedes subastar objetos verdes, azules y épicos, y también bolsas. Publicar cuesta un depósito del 5% del precio, que no se devuelve. La subasta dura 24 horas: si alguien la compra, el oro va directo a tu personaje; si nadie la compra, el objeto vuelve a tu mochila.</p>
+          <p>Para comprar, entra a la <a class="text-link" href="./?subasta">casa de subastas</a> y usa el botón o <code>!comprar n°</code>. Necesitas tener el oro, y no puedes comprar tus propias subastas.</p>
+        </details>
+        <details>
+          <summary>¿Cómo funcionan las mazmorras?</summary>
+          <p>Alguien canjea <b>Mazmorra</b> y durante 45 segundos todo el chat puede sumarse gratis con <code>!join</code>. Según cuántos sean y qué tan bueno sea su equipo, se elige la instancia: desde Ragefire Chasm con pocos hasta bandas con muchos. Tanques y sanadores salen de las clases del grupo.</p>
+          <p>El combate se ve en el stream. Al terminar, cada uno gana un objeto de los jefes, experiencia, oro y el logro de la instancia. Si el grupo cae, el oro es la mitad. Las bandas dan el triple de oro.</p>
+        </details>
+        <details>
+          <summary>¿Qué pasa si se me llena la mochila?</summary>
+          <p>La mochila tiene 16 casillas más hasta 4 bolsas. Si está llena, lo que ganes no se pierde: queda guardado y aparece cuando liberes espacio o consigas otra bolsa. Liberas espacio equipando, vendiendo o reforjando.</p>
+        </details>
+        <details>
+          <summary>¿Qué es reforjar?</summary>
+          <p>Fundes 3 objetos que no uses y obtienes 1 que tu clase sí puede usar. Su calidad y nivel salen del promedio de los tres que fundiste. Los eliges en la pestaña <b>Inventario</b>.</p>
+        </details>
+        <details>
+          <summary>¿Cómo funcionan los duelos?</summary>
+          <p>Canjea <b>Duelo</b> escribiendo a quién retas. Tiene 60 segundos para aceptar con <code>!aceptar</code>. Cada uno tira de 1 a 100 y suma un bonus por su equipo (1 punto cada 40 de GearScore, hasta +25). Si no acepta, te devuelven los puntos.</p>
+        </details>
+        <details>
+          <summary>¿Qué es el GearScore?</summary>
+          <p>Un número que mide tu equipo puesto: cuenta el nivel, la calidad y el casillero de cada objeto, con la misma fórmula del addon del juego. Ordena el ranking de la armería y te da el bonus de los duelos.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" id="sugerencias">
+      <h2>Sugerencias</h2>
+      <p class="section-text">¿Se te ocurre algo nuevo para el canal o la armería? Déjalo acá.</p>
+      <div class="suggestion-form" id="suggestion-form"></div>
+      <div class="suggestions" id="suggestion-list"></div>
+    </section>
+
     <section class="section" id="redes">
       <h2>Sígueme</h2>
       <div class="cards">
@@ -172,8 +245,10 @@
   <script src="botin.js?v=20260927g"></script>
   <script src="reforja.js?v=20260927g"></script>
   <script src="chat.js?v=20260927g"></script>
-  <script src="armeria.js?v=20260927g"></script>
+  <script src="armeria.js?v=20260927j"></script>
   <script src="landing.js?v=20260927g"></script>
   <script src="sesion.js?v=20260927g"></script>
+  <script src="noticias.js?v=20260927g"></script>
+  <script src="sugerencias.js?v=20260927g"></script>
 </body>
 </html>
