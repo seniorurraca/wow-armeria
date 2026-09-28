@@ -62,6 +62,7 @@ function chatMessageHtml(message) {
       <div class="chat-message-content">
         <div class="chat-message-author">
           <span class="chat-message-name">${escapeHtml(message.name)}</span>
+          ${roleIcon(message.role)}
           <span class="chat-message-time">${chatTime(message.created)}</span>
         </div>
         <div class="chat-message-text">${chatTextHtml(message.text)}</div>

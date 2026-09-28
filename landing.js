@@ -67,6 +67,7 @@ function renderRanking(armory) {
         <img class="row-icon" ${frameAttributes(viewer)} src="${portrait(viewer)}" alt="">
         <span class="level-badge" title="${levelText(viewer)}">${levelOf(viewer)}</span>
       </span>
+      ${roleIcon(viewer.role) || '<span class="role-icon"></span>'}
       <span class="row-name" style="color:${classOf(viewer).color}">${escapeHtml(titledName(viewer))}</span>
       <span class="row-meta">
         <span data-rarity="legendary" class="item-name">${legendary} leg.</span> ·
