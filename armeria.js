@@ -178,7 +178,7 @@ function renderViewer(viewer, tab = 'character') {
         <section class="frame" style="--class-color:${cls.color}">
           <header class="frame-title">
             <img class="portrait" ${frameAttributes(viewer)} src="${portrait(viewer)}" alt="">
-            <h1>${escapeHtml(titledName(viewer))}</h1>
+            <h1>${escapeHtml(titledName(viewer))}${roleIcon(viewer.role)}</h1>
             <p class="subtitle">${levelText(viewer)} ${cls.name}</p>
             ${xpBar(viewer)}
             ${titlePicker(viewer)}

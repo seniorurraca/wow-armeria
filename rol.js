@@ -1,10 +1,16 @@
 // Rol por defecto en las mazmorras: se elige acá y se arma "!setrole" (con sesión, un clic). Sin elegir, el grupo lo infiere de sus hechizos.
 // Solo los roles de su clase (misma regla que la API: api/src/dungeon/roles.js)
 const ROLES = {
-  dps: { label: 'DPS', command: 'dps' },
-  tank: { label: 'Tanque', command: 'tanque', classes: ['warrior', 'druid', 'paladin'] },
-  healer: { label: 'Sanador', command: 'sanador', classes: ['priest', 'druid', 'shaman', 'paladin'] }
+  dps: { label: 'DPS', command: 'dps', image: 'img/rol-dps.png' },
+  tank: { label: 'Tanque', command: 'tanque', image: 'img/rol-tanque.png', classes: ['warrior', 'druid', 'paladin'] },
+  healer: { label: 'Sanador', command: 'sanador', image: 'img/rol-sanador.png', classes: ['priest', 'druid', 'shaman', 'paladin'] }
 };
+
+// Ícono del rol (el de los grupos de Blizzard): ranking, ficha y chat. Nada si todavía no tiene
+function roleIcon(role) {
+  const info = ROLES[role];
+  return info ? `<img class="role-icon" src="${info.image}" alt="${info.label}" title="${info.label}">` : '';
+}
 
 const canPlay = (viewer, role) => !ROLES[role].classes || !viewer.class || ROLES[role].classes.includes(viewer.class);
 
