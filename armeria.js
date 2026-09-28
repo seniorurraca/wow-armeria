@@ -209,8 +209,9 @@ function renderViewer(viewer, tab = 'character') {
   setupTitlePicker(viewer);
   setupRolePicker(viewer);
   initChat();
-  showTab(tab);
+  // Se mide con Personaje a la vista: oculta mide 0 (al redibujar parado en Inventario las armas tapaban las pestañas)
   fixPanelHeight(app.querySelector('.frame'));
+  showTab(tab);
 }
 
 function showTab(tab) {
