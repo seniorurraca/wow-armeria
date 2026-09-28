@@ -5,6 +5,8 @@
   --button: #f0c75e;
   --text-soft: #c9c3b4;
   --live: #eb0400;
+  /* Barras de las visitas: dorado validado contra --panel (el de los botones es demasiado claro para una barra) */
+  --visit-bar: #b8892a;
 }
 
 html { scroll-behavior: smooth; }
@@ -556,4 +558,117 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
   .dungeon h3, .dungeon .section-text { padding-right: 60px; }
   .dungeon h3 { font-size: 22px; }
   .dungeon-icon { top: 18px; right: 16px; width: 48px; height: 48px; }
+}
+
+/* ---------- Visitas ---------- */
+
+.visits { margin-top: 20px; }
+
+.visit-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.visit-stat,
+.visit-panel {
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+.visit-stat strong { display: block; font-size: 36px; font-weight: normal; line-height: 1.1; }
+.visit-stat span { color: var(--text-soft); font-size: 14px; -webkit-text-stroke: 0; }
+
+.visit-panels {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.section .visit-panel h3 { margin: 0 0 14px; font-size: 18px; }
+
+.visit-chart {
+  display: flex;
+  gap: 2px;
+  height: 180px;
+}
+
+.visit-day {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  outline: none;
+}
+
+.visit-column { flex: 1; display: flex; align-items: flex-end; }
+
+.visit-bar {
+  width: 100%;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  background: var(--visit-bar);
+  transition: background .15s;
+}
+
+.visit-day small { color: var(--text-soft); font-size: 11px; text-align: center; -webkit-text-stroke: 0; }
+
+.visit-day:hover .visit-bar,
+.visit-day:focus-visible .visit-bar { background: var(--button); }
+
+.visit-day:hover::after,
+.visit-day:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #000;
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+  -webkit-text-stroke: 0;
+}
+
+.visit-day:first-child:hover::after,
+.visit-day:first-child:focus-visible::after { left: 0; transform: none; }
+.visit-day:last-child:hover::after,
+.visit-day:last-child:focus-visible::after { left: auto; right: 0; transform: none; }
+
+.visit-countries { display: grid; gap: 8px; list-style: none; }
+
+.visit-countries li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 30% auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.visit-countries img,
+.visit-flag-empty { width: 24px; height: 16px; border-radius: 2px; object-fit: cover; background: var(--line); }
+
+.visit-country-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.visit-country-bar { height: 8px; }
+.visit-country-bar span { display: block; height: 100%; min-width: 2px; border-radius: 0 4px 4px 0; background: var(--visit-bar); }
+
+.visit-country-count { min-width: 2.5em; text-align: right; color: var(--text-soft); -webkit-text-stroke: 0; }
+
+@media (max-width: 720px) {
+  .visit-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .visit-stat { padding: 12px; }
+  .visit-stat strong { font-size: 26px; }
+  .visit-panels { grid-template-columns: 1fr; }
+  .visit-chart { height: 140px; }
+  .visit-day small { font-size: 10px; }
 }
