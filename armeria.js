@@ -56,37 +56,6 @@ const classOf = viewer => CLASSES[viewer.class] || NO_CLASS;
 const classIcon = viewer => iconUrl(CLASSES[viewer.class] ? `classicon_${viewer.class}` : 'inv_misc_questionmark');
 const portrait = viewer => viewer.avatar ? escapeHtml(viewer.avatar) : classIcon(viewer);
 
-// Silueta de personaje con armadura y capa; hombrera, brazo y pierna se dibujan una vez y se espejan
-const SILHOUETTE = `
-  <svg class="silhouette" viewBox="0 0 200 420" aria-hidden="true">
-    <defs>
-      <linearGradient id="silhouette-fill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#1e1e1e"/>
-        <stop offset="1" stop-color="#070707"/>
-      </linearGradient>
-      <g id="silhouette-side">
-        <path d="M60 82 C40 80 24 92 22 110 C22 122 30 128 38 126 C46 118 58 114 70 112 L74 96 C72 88 68 84 60 82 Z"/>
-        <path d="M34 94 L18 70 L44 88 Z"/>
-        <path d="M36 120 L58 116 L55 188 L32 188 Z"/>
-        <path d="M28 184 L58 184 L55 242 L31 242 Z"/>
-        <circle cx="43" cy="253" r="13"/>
-        <path d="M72 262 L98 262 L97 318 L74 318 Z"/>
-        <ellipse cx="85" cy="318" rx="15" ry="11"/>
-        <path d="M72 322 L98 322 L98 380 L100 402 L64 402 C56 402 56 393 65 389 L72 380 Z"/>
-      </g>
-    </defs>
-    <path fill="#050505" d="M52 96 L148 96 L166 300 L176 398 L150 388 L128 402 L100 392 L72 402 L50 388 L24 398 L34 300 Z"/>
-    <g fill="url(#silhouette-fill)">
-      <path d="M100 12 C114 12 124 22 125 38 L126 56 C126 66 118 74 112 78 L88 78 C82 74 74 66 74 56 L75 38 C76 22 86 12 100 12 Z"/>
-      <rect x="88" y="70" width="24" height="18"/>
-      <path d="M62 104 C80 98 120 98 138 104 L134 150 C132 168 128 180 124 190 L76 190 C72 180 68 168 66 150 Z"/>
-      <path d="M72 186 L128 186 L130 206 L70 206 Z"/>
-      <path d="M72 204 L128 204 L136 272 L116 280 L100 272 L84 280 L64 272 Z"/>
-      <use href="#silhouette-side"/>
-      <use href="#silhouette-side" transform="translate(200 0) scale(-1 1)"/>
-    </g>
-  </svg>`;
-
 // Con ?u=nick se muestra la ficha de ese espectador; sin parámetro, la landing con el ranking
 const viewerLogin = (new URLSearchParams(location.search).get('u') || '').toLowerCase();
 // Con ?subasta, la casa de subastas (ver subasta.js)
@@ -238,7 +207,7 @@ function paperdoll(viewer, itemsById) {
     <div class="paperdoll">
       ${column('left')}
       <div class="model">
-        ${SILHOUETTE}
+        ${silhouette(viewer, itemsById)}
         <dl class="stats">
           ${stats.map(([label, value]) => `<div><dt>${label}:</dt><dd>${value}</dd></div>`).join('')}
         </dl>
