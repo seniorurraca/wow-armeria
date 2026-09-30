@@ -44,7 +44,9 @@ async function showLiveStatus() {
 
 async function showChannelAvatar() {
   const url = (await fetch(AVATAR_URL).then(r => r.text()).catch(() => '')).trim();
-  if (url.startsWith('https://')) document.getElementById('brand-avatar').src = url;
+  if (!url.startsWith('https://')) return;
+  document.getElementById('brand-avatar').src = url;
+  document.getElementById('favicon').href = url;
 }
 
 // ---------- Ranking de la armería ----------

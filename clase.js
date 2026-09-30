@@ -35,4 +35,20 @@ function classCanUse(item, classKey) {
   return !(item.slot === 'Off Hand' && item.type !== 'Shield' && !DUAL_WIELD_CLASSES.includes(classKey));
 }
 
+// Mismo SLOTS_BY_TYPE que api/src/game/rules.js
+const SLOTS_BY_TYPE = {
+  'Head': ['head'], 'Neck': ['neck'], 'Shoulder': ['shoulder'], 'Back': ['back'], 'Chest': ['chest'],
+  'Shirt': ['shirt'], 'Tabard': ['tabard'], 'Wrist': ['wrist'], 'Hands': ['hands'], 'Waist': ['waist'],
+  'Legs': ['legs'], 'Feet': ['feet'], 'Finger': ['finger1', 'finger2'], 'Trinket': ['trinket1', 'trinket2'],
+  'One-Hand': ['mainHand', 'offHand'], 'Main Hand': ['mainHand'], 'Two-Hand': ['mainHand'], 'Off Hand': ['offHand'],
+  'Held In Off-hand': ['offHand'], 'Ranged': ['ranged'], 'Thrown': ['ranged'], 'Relic': ['ranged']
+};
+
+// Casilleros donde su clase se puede poner el objeto (como slotsFor de la API)
+function slotsFor(item, classKey) {
+  const slots = SLOTS_BY_TYPE[item.slot] || [];
+  if (!classCanUse(item, classKey)) return [];
+  return item.slot === 'One-Hand' && !DUAL_WIELD_CLASSES.includes(classKey) ? slots.filter(s => s !== 'offHand') : slots;
+}
+
 const unusableClass = (item, viewer) => classCanUse(item, viewer.class) ? '' : ' unusable';

@@ -7,10 +7,29 @@ function equipButton(item, viewer) {
   return `<button class="wow-button equip-button" type="button" data-id="${escapeHtml(item.id)}">Equipar</button>`;
 }
 
-// Al costado de cada objeto equipado: una flechita que despliega "Desequipar objeto"
-function unequipButton(item) {
+// Al costado de cada objeto equipado: una flechita que despliega "Desequipar objeto" y lo de la mochila que va en ese casillero
+function wornFlyout(item, slot, viewer) {
   return `<button class="flyout-arrow" type="button" aria-label="Opciones"></button>
-    <button class="unequip-button" type="button" data-id="${escapeHtml(item.id)}">Desequipar objeto</button>`;
+    <div class="flyout-menu">
+      <button class="unequip-button" type="button" data-id="${escapeHtml(item.id)}">Desequipar objeto</button>
+      ${swapChoices(slot, viewer)}
+    </div>`;
+}
+
+// "#2" le dice a la API en cuál de los dos casilleros va (anillos, abalorios, mano izquierda)
+function swapChoices(slot, viewer) {
+  const worn = Object.values(viewer.equipped);
+  const choices = uniqueItems({ items: bagItems(viewer) })
+    .filter(item => !worn.includes(item.id) && slotsFor(item, viewer.class).includes(slot))
+    .sort((a, b) => RARITIES.indexOf(b.rarity) - RARITIES.indexOf(a.rarity) || a.name.localeCompare(b.name));
+  if (!choices.length) return '';
+
+  const command = item => {
+    const slots = slotsFor(item, viewer.class);
+    return `!equipar ${item.name}${slots.length > 1 ? ` #${slots.indexOf(slot) + 1}` : ''}`;
+  };
+  return `<div class="swap-choices">${choices.map(item =>
+    `<a class="slot swap-choice" data-rarity="${item.rarity}" data-id="${escapeHtml(item.id)}" data-command="${escapeHtml(command(item))}" href="${itemUrl(item.id)}"><img src="${escapeHtml(item.icon)}" alt=""></a>`).join('')}</div>`;
 }
 
 function closeFlyouts(except) {
@@ -35,5 +54,9 @@ function setupEquipButtons(viewer) {
   app.querySelectorAll('.unequip-button').forEach(button => button.addEventListener('click', () => {
     const item = itemsById[button.dataset.id];
     openItemWindow(item, `!desequipar ${item.name}`, 'pasarlo a la bolsa', 'Mover a la bolsa');
+  }));
+  app.querySelectorAll('.swap-choice').forEach(choice => choice.addEventListener('click', event => {
+    event.preventDefault();
+    openItemWindow(itemsById[choice.dataset.id], choice.dataset.command, 'equipártelo', 'Equipar');
   }));
 }

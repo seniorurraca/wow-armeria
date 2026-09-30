@@ -81,11 +81,19 @@
   border-top: 5px solid var(--gold);
 }
 
-.unequip-button {
+.flyout-menu {
   position: absolute;
   top: 50%;
   left: calc(100% + 12px);
   display: none;
+  align-items: center;
+  gap: 6px;
+  transform: translateY(-50%);
+}
+.open .flyout-menu { display: flex; }
+
+.unequip-button {
+  flex: none;
   padding: 5px 12px;
   border: 1px solid #a8834a;
   border-radius: 3px;
@@ -97,9 +105,35 @@
   white-space: nowrap;
   text-shadow: var(--outline);
   cursor: pointer;
-  transform: translateY(-50%);
 }
-.open .unequip-button { display: block; }
-.slots.right .unequip-button { left: auto; right: 100%; margin-right: 2px; }
-.slots.bottom .unequip-button { top: auto; bottom: 100%; left: 50%; margin-bottom: 2px; transform: translateX(-50%); }
 .unequip-button:hover { filter: brightness(1.3); }
+
+/* Lo de la mochila que va en ese casillero, como el gestor de equipamiento del WoW */
+.swap-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: max-content;
+  max-width: calc(5 * var(--slot) + 6 * 4px);
+  padding: 4px;
+  border: 1px solid #a8834a;
+  border-radius: 4px;
+  background: rgba(10, 7, 3, .95);
+  box-shadow: 0 0 0 1px #000, 0 2px 6px rgba(0, 0, 0, .8);
+}
+
+/* Columna derecha: "Desequipar objeto" a la izquierda del objeto y lo de la mochila a la derecha de la flechita */
+.slots.right .open .flyout-menu { display: contents; }
+.slots.right .unequip-button,
+.slots.right .swap-choices { position: absolute; top: 50%; transform: translateY(-50%); }
+.slots.right .unequip-button { right: 100%; margin-right: 2px; }
+.slots.right .swap-choices { left: calc(100% + 12px); }
+
+.slots.bottom .flyout-menu {
+  top: auto;
+  bottom: 100%;
+  left: 50%;
+  flex-direction: column-reverse;
+  margin-bottom: 2px;
+  transform: translateX(-50%);
+}

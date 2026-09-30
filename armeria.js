@@ -221,7 +221,7 @@ function showTab(tab) {
 }
 
 function paperdoll(viewer, itemsById) {
-  const column = (side) => `<div class="slots ${side}">${PAPERDOLL[side].map(slot => slotHtml(slot, itemsById[viewer.equipped[slot]])).join('')}</div>`;
+  const column = (side) => `<div class="slots ${side}">${PAPERDOLL[side].map(slot => slotHtml(slot, itemsById[viewer.equipped[slot]], viewer)).join('')}</div>`;
   const items = uniqueItems(viewer);
   const stats = [
     ['GearScore', coloredGearScore(gearScore(viewer))],
@@ -248,11 +248,11 @@ function paperdoll(viewer, itemsById) {
     </div>`;
 }
 
-function slotHtml(slot, item) {
+function slotHtml(slot, item, viewer) {
   if (!item) {
     return `<span class="slot empty" title="${SLOTS[slot].label}"><img src="${iconUrl(`inventoryslot_${SLOTS[slot].icon}`)}" alt=""></span>`;
   }
-  return `<span class="worn-slot"><a class="slot" data-rarity="${item.rarity}" href="${itemUrl(item.id)}"><img src="${escapeHtml(item.icon)}" alt=""></a>${unequipButton(item)}</span>`;
+  return `<span class="worn-slot"><a class="slot" data-rarity="${item.rarity}" href="${itemUrl(item.id)}"><img src="${escapeHtml(item.icon)}" alt=""></a>${wornFlyout(item, slot, viewer)}</span>`;
 }
 
 // ---------- Inventario y hechizos ----------
