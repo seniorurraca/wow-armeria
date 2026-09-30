@@ -146,11 +146,12 @@ function renderViewer(viewer, tab = 'character') {
       <div>
         <section class="frame" style="--class-color:${cls.color}">
           <header class="frame-title">
-            <img class="portrait" ${frameAttributes(viewer)} src="${portrait(viewer)}" alt="">
+            ${framedPortrait(viewer, portrait(viewer), 'portrait')}
             <h1>${escapeHtml(titledName(viewer))}${roleIcon(viewer.role)}</h1>
             <p class="subtitle">${levelText(viewer)} ${cls.name}</p>
             ${xpBar(viewer)}
             ${titlePicker(viewer)}
+            ${framePicker(viewer)}
             ${rolePicker(viewer)}
           </header>
           <div class="panel" data-tab="character">${paperdoll(viewer, itemsById)}</div>
@@ -177,6 +178,7 @@ function renderViewer(viewer, tab = 'character') {
   setupSellButtons(viewer);
   setupPagedLists(app);
   setupTitlePicker(viewer);
+  setupFramePicker(viewer);
   setupRolePicker(viewer);
   initChat();
   // Se mide con Personaje a la vista: oculta mide 0 (al redibujar parado en Inventario las armas tapaban las pestañas)

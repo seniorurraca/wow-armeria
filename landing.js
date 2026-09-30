@@ -66,7 +66,7 @@ function renderRanking(armory) {
     <a class="row" href="?u=${encodeURIComponent(login)}">
       <span class="rank">${i + 1}</span>
       <span class="row-portrait">
-        <img class="row-icon" ${frameAttributes(viewer)} src="${portrait(viewer)}" alt="">
+        ${framedPortrait(viewer, portrait(viewer), 'row-icon')}
         <span class="level-badge" title="${levelText(viewer)}">${levelOf(viewer)}</span>
       </span>
       ${roleIcon(viewer.role) || '<span class="role-icon"></span>'}

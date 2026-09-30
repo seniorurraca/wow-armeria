@@ -1,0 +1,60 @@
+/* ---------- Marcos del retrato (marcos.js): retrato redondo, disco oscuro detrás y el marco encima ---------- */
+
+.framed {
+  display: inline-block;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  overflow: visible;
+}
+.framed:not(.portrait) { position: relative; }
+/* El marco sobresale más que el borde de antes: el retrato de la ficha baja un poco para que no quede bajo la barra de arriba */
+.portrait.framed { top: 4px; left: -4px; }
+
+.framed-avatar {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Tapa los bordes semitransparentes del recorte (se nota en Onyxia y Alanegra sobre fondos claros) */
+.frame-back {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--frame-w) * .85);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, #0b0d14 72%, rgba(11, 13, 20, 0));
+  transform: translate(-50%, -50%);
+}
+
+.frame-img {
+  position: absolute;
+  z-index: 2;
+  top: var(--frame-top);
+  left: var(--frame-left);
+  width: var(--frame-w);
+  max-width: none;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .7));
+}
+
+.row-portrait .level-badge { z-index: 3; }
+
+/* Ventana para elegir marco: el retrato grande con el marco */
+.frame-preview { display: grid; place-items: center; width: 150px; height: 150px; }
+.frame-preview-portrait { width: 84px; height: 84px; }
+
+/* Avatar de sesión (arriba a la derecha): el pill achica todas sus imágenes a 26 px; el marco va a su tamaño */
+/* La barra oculta y recorta los span del pill (el nombre): el retrato con marco no */
+.session-pill .framed.session-avatar { display: inline-block; overflow: visible; flex: none; width: 26px; height: 26px; }
+.session-pill .framed .frame-back { display: block; overflow: visible; }
+.session-pill .framed .framed-avatar { width: 100%; height: 100%; }
+.session-pill .framed .frame-img { width: var(--frame-w); height: auto; border-radius: 0; }

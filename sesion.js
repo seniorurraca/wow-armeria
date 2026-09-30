@@ -78,6 +78,7 @@ const sessionToken = takeSessionFromUrl() || storedSession();
 const sessionReady = sessionUser(sessionToken).then(user => {
   signedInUser = user;
   renderSession(user);
+  if (user) showSessionFrame(user);
 });
 
 document.getElementById('session-logout').addEventListener('click', signOut);

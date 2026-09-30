@@ -47,7 +47,7 @@
   text-shadow: var(--outline);
 }
 
-.title-select {
+.title-select, .frame-select {
   min-width: 0;
   max-width: 100%;
   padding: 2px 6px;
