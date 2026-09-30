@@ -65,10 +65,11 @@ code {
   font-size: 11px;
   letter-spacing: .12em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .topnav { display: flex; gap: 20px; }
-.topnav a { color: var(--text-soft); }
+.topnav a { color: var(--text-soft); white-space: nowrap; }
 .topnav a:hover { color: var(--button); }
 
 /* ---------- Sesión con Twitch ---------- */
@@ -114,6 +115,7 @@ code {
   border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--text-soft);
+  white-space: nowrap;
 }
 
 .live-dot {
@@ -539,9 +541,16 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
   -webkit-text-stroke: 0;
 }
 
+@media (max-width: 1180px) {
+  .topbar-inner { flex-wrap: wrap; row-gap: 8px; }
+  .topnav { order: 1; width: 100%; justify-content: center; }
+}
+
 @media (max-width: 720px) {
   .topnav { display: none; }
+  .topbar-inner { gap: 10px; }
   .brand { gap: 8px; }
+  .brand small { display: none; }
   .session-pill, .session-logout { margin-right: 4px; }
   .session-logout { font-size: 12px; }
   .session-pill.logged-in span { display: none; }
