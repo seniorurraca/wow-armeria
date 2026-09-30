@@ -68,9 +68,13 @@ code {
   white-space: nowrap;
 }
 
-.topnav { display: flex; gap: 20px; }
+.topnav { display: flex; align-items: center; gap: 20px; }
 .topnav a { color: var(--text-soft); white-space: nowrap; }
 .topnav a:hover { color: var(--button); }
+.nav-icon { display: flex; }
+.nav-icon svg { width: 22px; height: 22px; fill: currentColor; }
+.topnav .nav-icon:hover { color: var(--accent); }
+.icon-sprite { display: none; }
 
 /* ---------- Sesión con Twitch ---------- */
 
@@ -236,6 +240,13 @@ code {
 
 .button.primary:hover { background: #ffd978; }
 
+.button svg { width: 20px; height: 20px; fill: currentColor; }
+.button.twitch, .button.discord { border-color: var(--accent); background: var(--accent); }
+.button.twitch:hover, .button.discord:hover { filter: brightness(1.15); }
+.twitch { --accent: #9146ff; }
+.youtube { --accent: #ff0033; }
+.discord { --accent: #5865f2; }
+
 /* ---------- Secciones ---------- */
 
 .section {
@@ -292,9 +303,6 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
 }
 
 .card svg { flex: none; width: 40px; height: 40px; fill: var(--accent); }
-.card.twitch { --accent: #9146ff; }
-.card.youtube { --accent: #ff0033; }
-.card.discord { --accent: #5865f2; }
 
 .card.reward img {
   flex: none;
