@@ -173,6 +173,7 @@ function renderViewer(viewer, tab = 'character') {
   setupSpellbook(viewer);
   setupReforge(viewer);
   setupEquipButtons(viewer);
+  setupTabards(viewer);
   setupSellButtons(viewer);
   setupPagedLists(app);
   setupTitlePicker(viewer);
@@ -218,6 +219,7 @@ function paperdoll(viewer, itemsById) {
 }
 
 function slotHtml(slot, item, viewer) {
+  if (slot === 'tabard' && viewer.tabards?.length) return tabardSlotHtml(viewer);
   if (!item) {
     return `<span class="slot empty" title="${SLOTS[slot].label}"><img src="${iconUrl(`inventoryslot_${SLOTS[slot].icon}`)}" alt=""></span>`;
   }

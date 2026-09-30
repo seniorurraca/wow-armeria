@@ -51,7 +51,7 @@ function setupEquipButtons(viewer) {
     closeFlyouts(slot);
     slot.classList.toggle('open');
   }));
-  app.querySelectorAll('.unequip-button').forEach(button => button.addEventListener('click', () => {
+  app.querySelectorAll('.unequip-button[data-id]').forEach(button => button.addEventListener('click', () => {
     const item = itemsById[button.dataset.id];
     openItemWindow(item, `!desequipar ${item.name}`, 'pasarlo a la bolsa', 'Mover a la bolsa');
   }));

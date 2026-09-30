@@ -1,6 +1,7 @@
 // Silueta de personaje con armadura y capa (pestaña Personaje). Cada parte se tiñe con la calidad de lo que lleva
-// en ese casillero (data-rarity, como los casilleros); sin nada puesto queda negra
+// en ese casillero (data-rarity, como los casilleros); sin nada puesto queda negra. El tabardo elegido, con su color, sobre el pecho
 function silhouette(viewer, itemsById) {
+  const tabard = chosenTabard(viewer);
   const rarity = slot => {
     const item = itemsById[viewer.equipped[slot]];
     return item ? ` data-rarity="${item.rarity}"` : '';
@@ -28,8 +29,9 @@ function silhouette(viewer, itemsById) {
       <path${rarity('head')} d="M100 12 C114 12 124 22 125 38 L126 56 C126 66 118 74 112 78 L88 78 C82 74 74 66 74 56 L75 38 C76 22 86 12 100 12 Z"/>
       <rect${rarity('neck')} x="88" y="70" width="24" height="18"/>
       <path${rarity('chest')} d="M62 104 C80 98 120 98 138 104 L134 150 C132 168 128 180 124 190 L76 190 C72 180 68 168 66 150 Z"/>
-      <path${rarity('waist')} d="M72 186 L128 186 L130 206 L70 206 Z"/>
       <path${rarity('legs')} d="M72 204 L128 204 L136 272 L116 280 L100 272 L84 280 L64 272 Z"/>
+      ${tabard ? `<path class="tabard" fill="${tabard.color}" d="M82 104 L118 104 L120 272 L100 286 L80 272 Z"/>` : ''}
+      <path${rarity('waist')} d="M72 186 L128 186 L130 206 L70 206 Z"/>
       <g>${side}</g>
       <g transform="translate(200 0) scale(-1 1)">${side}</g>
     </g>
