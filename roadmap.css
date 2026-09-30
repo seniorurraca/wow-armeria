@@ -22,8 +22,10 @@
 .roadmap-band {
   grid-row: 2;
   grid-column: span var(--releases);
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
   margin: 0 -5px;
   border-block: 1px solid #1c130a;
   border-left: 2px solid rgba(0, 0, 0, .55);
@@ -99,6 +101,8 @@
   text-transform: uppercase;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 26px), 50% 100%, 0 calc(100% - 26px));
 }
+
+.roadmap-band small { font-size: 11px; letter-spacing: .2em; opacity: .75; }
 
 /* Lanzamiento: pergamino, como el de Forever en el roadmap de Blizzard */
 .launch .roadmap-head,
