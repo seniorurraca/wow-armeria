@@ -37,6 +37,15 @@ if (!viewerLogin && !auctionMode) showRoadmap();
 function showRoadmap() {
   const nextRelease = ROADMAP.flatMap(season => season.releases).find(release => !release.done);
   document.getElementById('roadmap-list').innerHTML = ROADMAP.map(season => roadmapSeason(season, nextRelease)).join('');
+  centerNextRelease();
+}
+
+function centerNextRelease() {
+  const scroller = document.querySelector('.roadmap-scroll');
+  const next = scroller.querySelector('.next .roadmap-head');
+  if (!next) return;
+  const offset = next.getBoundingClientRect().left - scroller.getBoundingClientRect().left;
+  scroller.scrollLeft += offset - (scroller.clientWidth - next.offsetWidth) / 2;
 }
 
 function roadmapSeason(season, nextRelease) {

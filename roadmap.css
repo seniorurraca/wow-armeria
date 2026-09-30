@@ -138,13 +138,8 @@
   -webkit-text-stroke: 0;
 }
 
-/* Celular: las estaciones una debajo de la otra y cada banderín entero */
 @media (max-width: 720px) {
-  .roadmap { display: block; min-width: 0; }
-  .roadmap-season { display: block; }
-  .roadmap-release { display: block; margin: 0 auto 12px; max-width: 360px; }
-  .roadmap-band { margin: 20px 0 12px; padding: 8px 0; }
-  .roadmap-head { border-radius: 4px 4px 0 0; }
-  .launch .roadmap-head,
-  .forever .roadmap-head { padding-top: 16px; }
+  .roadmap-scroll { scroll-snap-type: x mandatory; }
+  .roadmap { grid-auto-columns: 70vw; min-width: 0; }
+  .roadmap-head { scroll-snap-align: center; }
 }
