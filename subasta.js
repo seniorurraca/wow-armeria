@@ -1,4 +1,4 @@
-// Casa de subastas (./?subasta, con &u=nick muestra tu oro y tus subastas) y ventana "Vender" del Inventario (vendedor NPC o subasta).
+// Casa de subastas (./?subasta, tu oro y tus subastas: las de quien inició sesión o, sin sesión, las del &u=nick del formulario) y ventana "Vender" del Inventario (vendedor NPC o subasta).
 // La página arma "!vendernpc id", "!vender id precio" y "!comprar n°" para pegar en el chat; Streamer.bot (wow-armeria.cs) mueve oro y objetos
 const AUCTION_HOURS = 24;
 const AUCTION_DEPOSIT_PERCENT = 5;
@@ -62,8 +62,11 @@ function suggestedPrice(item) {
 
 // ---------- Casa de subastas ----------
 
+const auctionLogin = () => signedInUser?.login || viewerLogin;
+
 function renderAuctionHouse(armory) {
-  const viewer = armory.viewers[viewerLogin];
+  const me = auctionLogin();
+  const viewer = armory.viewers[me];
   const state = { name: '', rarity: '', category: 'all', usable: false, sort: 'price', dir: 1, selected: null };
 
   app.innerHTML = `
@@ -96,13 +99,13 @@ function renderAuctionHouse(armory) {
           <button class="wow-button ah-buy" type="button" disabled>Comprar</button>
         </footer>
       </div>
-      <div class="panel" data-tab="mine" hidden>${myAuctions(armory, viewer)}</div>
+      <div class="panel" data-tab="mine" hidden>${myAuctions(armory, me)}</div>
     </section>
     <nav class="tabs">
       <button data-tab="browse">Explorar</button>
       <button data-tab="mine">Mis subastas</button>
     </nav>
-    <a class="back" href="${viewer ? `./?u=${encodeURIComponent(viewerLogin)}` : './#armeria'}">${viewer ? 'Volver a mi armería' : 'Ver todos los aventureros'}</a>`;
+    <a class="back" href="${viewer ? `./?u=${encodeURIComponent(me)}` : './#armeria'}">${viewer ? 'Volver a mi armería' : 'Ver todos los aventureros'}</a>`;
 
   const results = app.querySelector('.ah-results');
   const buy = app.querySelector('.ah-buy');
@@ -113,7 +116,7 @@ function renderAuctionHouse(armory) {
     if (!shown.some(a => a.id === state.selected)) state.selected = null;
     results.innerHTML = auctionTable(shown, armory, state);
     const selected = auctions.find(a => a.id === state.selected);
-    buy.disabled = !selected || selected.seller === viewerLogin;
+    buy.disabled = !selected || selected.seller === me;
     app.querySelectorAll('.ah-categories button').forEach(b => b.classList.toggle('active', b.dataset.category === state.category));
     if (window.$WowheadPower) window.$WowheadPower.refreshLinks();
   };
@@ -215,8 +218,8 @@ function openBuyWindow(auction, viewer) {
 
 // ---------- Mis subastas ----------
 
-function myAuctions(armory, viewer) {
-  if (!viewerLogin) {
+function myAuctions(armory, me) {
+  if (!me) {
     return `
       <form class="ah-nick">
         <p class="hint">Escribe tu nombre de Twitch para ver tu oro y tus subastas.</p>
@@ -224,7 +227,7 @@ function myAuctions(armory, viewer) {
         <button class="wow-button" type="submit">Ver</button>
       </form>`;
   }
-  const mine = activeAuctions(armory).filter(a => a.seller === viewerLogin);
+  const mine = activeAuctions(armory).filter(a => a.seller === me);
   const rows = mine.map(a => `
     <div class="row" data-rarity="${a.item.rarity}">
       <a class="row-link" href="${itemUrl(a.item.id)}">
@@ -235,7 +238,7 @@ function myAuctions(armory, viewer) {
       ${moneyHtml(a.price)}
     </div>`);
   return `
-    <p class="hint">Para vender, entra a <a class="ah-link" href="./?u=${encodeURIComponent(viewerLogin)}">tu armería</a> → Inventario → <b>Vender</b>. Si nadie la compra en ${AUCTION_HOURS} h, el objeto vuelve a tu mochila (el depósito no).</p>
+    <p class="hint">Para vender, entra a <a class="ah-link" href="./?u=${encodeURIComponent(me)}">tu armería</a> → Inventario → <b>Vender</b>. Si nadie la compra en ${AUCTION_HOURS} h, el objeto vuelve a tu mochila (el depósito no).</p>
     <div class="list history">${rows.join('') || '<p class="status">No tienes subastas activas.</p>'}</div>`;
 }
 

@@ -71,19 +71,24 @@ if (viewerLogin || auctionMode) {
   showStatus('Cargando la armería...');
 }
 
-// sessionReady (sesion.js): la ficha se dibuja sabiendo si el que mira inició sesión
-loadArmory()
-  .then(armory => sessionReady.then(() => render(armory)))
-  .catch(err => {
-    console.log('[Armería] No se pudo cargar', err);
-    const text = 'No se pudo cargar la armería. Prueba de nuevo en un rato.';
-    if (viewerLogin || auctionMode) showStatus(text);
-    else renderRankingStatus(text);
-  });
+// sessionReady (sesion.js, carga después): la ficha se dibuja sabiendo si el que mira inició sesión.
+// La subasta la pide con el login de la sesión, así que espera a saberlo
+document.addEventListener('DOMContentLoaded', () => {
+  const armoryReady = auctionMode ? sessionReady.then(loadArmory) : loadArmory();
+  armoryReady
+    .then(armory => sessionReady.then(() => render(armory)))
+    .catch(err => {
+      console.log('[Armería] No se pudo cargar', err);
+      const text = 'No se pudo cargar la armería. Prueba de nuevo en un rato.';
+      if (viewerLogin || auctionMode) showStatus(text);
+      else renderRankingStatus(text);
+    });
+});
 
 async function loadArmory() {
   const path = auctionMode ? 'auction' : viewerLogin ? 'viewer' : 'ranking';
-  const res = await fetch(`${API_URL}/${path}?u=${encodeURIComponent(viewerLogin)}`);
+  const login = auctionMode ? auctionLogin() : viewerLogin;
+  const res = await fetch(`${API_URL}/${path}?u=${encodeURIComponent(login)}`);
   if (!res.ok) throw new Error(`La API respondió ${res.status}`);
   return res.json();
 }
@@ -163,7 +168,7 @@ function renderViewer(viewer, tab = 'character') {
         <nav class="tabs">
           ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
         </nav>
-        <a class="back" href="./?subasta&u=${encodeURIComponent(viewerLogin)}">Ir a la casa de subastas</a>
+        <a class="back" href="./?subasta">Ir a la casa de subastas</a>
         <a class="back" href="./#armeria">Ver todos los aventureros</a>
       </div>
       <div class="chat-panel">${renderChatArea()}</div>
