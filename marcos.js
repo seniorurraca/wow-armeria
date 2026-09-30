@@ -1,37 +1,16 @@
-// Marcos del retrato (img/marcos/): el que eligió con !marco o, si no eligió, el último que desbloqueó (el más difícil).
+// Marcos del retrato: aros de metal hechos en CSS (marcos.css), el que eligió con !marco o, si no eligió, el último que desbloqueó (el más difícil).
 // La API los manda en viewer.frames. Se ven en la ficha, el ranking y el avatar de sesión (en el chat no: serían demasiadas imágenes)
 const AUTO_FRAME = 'automatico';
-// Agujero de cada PNG (medido): centro x, centro y y diámetro en fracción del ancho; y alto / ancho de la imagen
-const FRAME_HOLES = {
-  aventurero: [0.497, 0.494, 0.792, 174 / 173],
-  milicia: [0.497, 0.436, 0.593, 202 / 177],
-  veterano: [0.489, 0.475, 0.537, 202 / 188],
-  deadmines: [0.489, 0.500, 0.656, 216 / 186],
-  escarlata: [0.486, 0.507, 0.536, 219 / 179],
-  'roca-negra': [0.508, 0.485, 0.550, 266 / 189],
-  'nucleo-de-magma': [0.497, 0.523, 0.519, 264 / 189],
-  onyxia: [0.487, 0.551, 0.556, 265 / 189],
-  alanegra: [0.479, 0.586, 0.500, 266 / 188],
-  cenarion: [0.503, 0.537, 0.519, 268 / 187]
-};
-// El agujero queda un poco más chico que el retrato: el marco tapa su borde
-const FRAME_OVERLAP = 0.9;
 
 const shownFrame = viewer => {
   const frames = viewer.frames || [];
   return frames.find(f => f.id === viewer.frame) || frames[frames.length - 1] || null;
 };
 
-// Retrato redondo, disco oscuro detrás (así no se notan los bordes del recorte) y el marco encima, con su agujero sobre la cara.
 // Sin marcos (una ficha que todavía no pasó por la API nueva): el borde de color por nivel de antes
 function framedPortrait(viewer, src, className, frame = shownFrame(viewer)) {
-  if (!frame || !FRAME_HOLES[frame.id]) return `<img class="${className}" ${frameAttributes(viewer)} src="${src}" alt="">`;
-  const [x, y, hole, ratio] = FRAME_HOLES[frame.id];
-  const width = 100 / hole * FRAME_OVERLAP;
-  const style = `--frame-w:${width}%;--frame-left:${50 - x * width}%;--frame-top:${50 - y * width * ratio}%`;
-  return `<span class="framed ${className}" style="${style}" title="Marco: ${escapeHtml(frame.name)}">
-    <span class="frame-back"></span><img class="framed-avatar" src="${src}" alt=""><img class="frame-img" src="img/marcos/${frame.id}.png" alt="">
-  </span>`;
+  if (!frame) return `<img class="${className}" ${frameAttributes(viewer)} src="${src}" alt="">`;
+  return `<img class="${className} metal-ring" data-metal="${frame.id}"${viewer.stars ? ' data-starred' : ''} src="${src}" alt="" title="Marco: ${escapeHtml(frame.name)}">`;
 }
 
 // Arriba a la derecha, con la sesión iniciada: tu avatar con tu marco (una consulta de tu ficha)

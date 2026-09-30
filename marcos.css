@@ -1,60 +1,33 @@
-/* ---------- Marcos del retrato (marcos.js): retrato redondo, disco oscuro detrás y el marco encima ---------- */
+/* ---------- Marcos del retrato (marcos.js): aro de metal en CSS, brillo cónico y una textura sutil de metal martillado ---------- */
 
-.framed {
-  display: inline-block;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  box-shadow: none;
-  overflow: visible;
-}
-.framed:not(.portrait) { position: relative; }
-/* El marco sobresale más que el borde de antes: el retrato de la ficha baja un poco para que no quede bajo la barra de arriba */
-.portrait.framed { top: 4px; left: -4px; }
-
-.framed-avatar {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
+.metal-ring {
+  --rarity: var(--metal-light);
+  border-style: solid;
+  border-color: transparent;
   border-radius: 50%;
+  background:
+    repeating-conic-gradient(rgba(0, 0, 0, .08) 0 2deg, transparent 2deg 5deg) border-box,
+    conic-gradient(from 20deg, var(--metal-light), var(--metal-dark) 22%, var(--metal) 38%, var(--metal-light) 52%,
+      var(--metal-dark) 72%, var(--metal) 88%, var(--metal-light)) border-box;
+  box-shadow: 0 0 0 1px #000, 0 3px 8px rgba(0, 0, 0, .7), var(--metal-glow, 0 0 0 transparent);
   object-fit: cover;
-  background: #000;
 }
 
-/* Tapa los bordes semitransparentes del recorte (se nota en Onyxia y Alanegra sobre fondos claros) */
-.frame-back {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: calc(var(--frame-w) * .85);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle closest-side, #0b0d14 72%, rgba(11, 13, 20, 0));
-  transform: translate(-50%, -50%);
-}
+.portrait.metal-ring, .frame-preview-portrait.metal-ring { border-width: 5px; }
+.row-icon.metal-ring { border-width: 3px; }
+.session-avatar.metal-ring { border-width: 2px; }
 
-.frame-img {
-  position: absolute;
-  z-index: 2;
-  top: var(--frame-top);
-  left: var(--frame-left);
-  width: var(--frame-w);
-  max-width: none;
-  pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .7));
-}
-
-.row-portrait .level-badge { z-index: 3; }
+[data-metal="cobre"]     { --metal-light: #f3b48a; --metal: #b8663a; --metal-dark: #542611; }
+[data-metal="estano"]    { --metal-light: #e4e4dc; --metal: #9d9d93; --metal-dark: #45453f; }
+[data-metal="bronce"]    { --metal-light: #f2c67c; --metal: #a6723a; --metal-dark: #4a3012; }
+[data-metal="plata"]     { --metal-light: #ffffff; --metal: #bfc5cb; --metal-dark: #585e64; }
+[data-metal="oro"]       { --metal-light: #fff3a6; --metal: #deae2e; --metal-dark: #6a4606; }
+[data-metal="veraplata"] { --metal-light: #ffffff; --metal: #d4e4ef; --metal-dark: #5f7f94; }
+[data-metal="mitril"]    { --metal-light: #e6f5ff; --metal: #8cb2c6; --metal-dark: #2f5165; }
+[data-metal="torio"]     { --metal-light: #cfe7dc; --metal: #6c8d83; --metal-dark: #22362d; }
+[data-metal="arcanita"]  { --metal-light: #ffc6f0; --metal: #bd48a6; --metal-dark: #4a0c40; --metal-glow: 0 0 8px rgba(214, 90, 190, .6); }
+[data-metal="diamante"]  { --metal-light: #ffffff; --metal: #bdefff; --metal-dark: #3f9cc0; --metal-glow: 0 0 8px rgba(150, 230, 255, .7); }
 
 /* Ventana para elegir marco: el retrato grande con el marco */
-.frame-preview { display: grid; place-items: center; width: 150px; height: 150px; }
+.frame-preview { display: grid; place-items: center; }
 .frame-preview-portrait { width: 84px; height: 84px; }
-
-/* Avatar de sesión (arriba a la derecha): el pill achica todas sus imágenes a 26 px; el marco va a su tamaño */
-/* La barra oculta y recorta los span del pill (el nombre): el retrato con marco no */
-.session-pill .framed.session-avatar { display: inline-block; overflow: visible; flex: none; width: 26px; height: 26px; }
-.session-pill .framed .frame-back { display: block; overflow: visible; }
-.session-pill .framed .framed-avatar { width: 100%; height: 100%; }
-.session-pill .framed .frame-img { width: var(--frame-w); height: auto; border-radius: 0; }
