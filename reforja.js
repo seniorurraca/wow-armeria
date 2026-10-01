@@ -19,7 +19,7 @@ function reforgeBar() {
     <div class="reforge-bar">
       <button class="wow-button reforge-toggle" type="button">⚒️ Reforjar objetos</button>
       <div class="reforge-panel" hidden>
-        <p class="hint">Elige ${REFORGE_MATERIALS} objetos de tu mochila que no uses. Se funden en uno que <b>tu clase</b> sí puede usar, de calidad y nivel parecidos al promedio.</p>
+        <p class="hint">Elige ${REFORGE_MATERIALS} objetos de tu mochila que no uses. Se funden en uno hecho para <b>tu clase</b> (su armadura y sus stats), de calidad y nivel iguales o mejores que el mejor de los tres.</p>
         <div class="reforge-footer">
           <span class="reforge-status"></span>
           <button class="wow-button reforge-go" type="button" disabled>Reforjar</button>
