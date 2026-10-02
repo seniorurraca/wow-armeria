@@ -6,6 +6,9 @@ const SUPPLY_FOR = { all: 'todo el grupo', tank: 'el tanque', healer: 'los sanad
 let quartersCatalog = null;
 let quartersCatalogLoad = null;
 let quartersView = 'board';
+// Hasta el lanzamiento (Parche 1.1) la pestaña solo la ve el streamer, para probarla
+const QUARTERS_LAUNCH = Date.parse('2026-10-09T00:00:00-03:00');
+const quartersOpen = () => Date.now() >= QUARTERS_LAUNCH || signedInUser?.login === CHANNEL;
 
 const loadQuartersCatalog = () => quartersCatalogLoad ||= fetch(`${API_URL}/quarters`).then(res => res.json()).then(c => { quartersCatalog = c; });
 const catalogEntry = (list, id) => list.find(entry => entry.id === id);

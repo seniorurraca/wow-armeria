@@ -167,7 +167,7 @@ function renderViewer(viewer, tab = 'character') {
           <div class="panel" data-tab="quarters" hidden>${quartersPanel(viewer)}</div>
         </section>
         <nav class="tabs">
-          ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
+          ${Object.entries(TABS).filter(([key]) => key !== 'quarters' || quartersOpen()).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
         </nav>
         <a class="back" href="./?subasta">Ir a la casa de subastas</a>
         <a class="back" href="./#armeria">Ver todos los aventureros</a>
