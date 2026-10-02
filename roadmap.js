@@ -8,7 +8,7 @@ const ROADMAP = [
     { kind: 'patch', title: 'Parche 1.0.1', subtitle: 'Preparados', date: '1 OCT', icon: 'spell_holy_wordfortitude', done: true,
       items: ['Bufos al entrar a la mazmorra', 'Contrajuego en los duelos: disipar, liberarse, escapar'] },
     { kind: 'patch', title: 'Parche 1.1', subtitle: 'La arena', date: '9 OCT', icon: 'achievement_arena_2v2_7',
-      items: ['Ranking de duelistas', 'Efectos de hechizos en los duelos'] },
+      items: ['Ranking de duelistas', 'Efectos de hechizos en los duelos', 'El Cuartel de SeniorUrraca: misiones con seguidores'] },
     { kind: 'event', title: 'Festival de la Linterna', date: '18 OCT', icon: 'achievement_halloween_witch_01',
       items: ['Mazmorra de Halloween', 'El Jinete decapitado', 'Recompensa del evento'] },
     { kind: 'forever', title: 'WoW Forever', date: '4 NOV', icon: 'inv_misc_head_orc_01',
