@@ -1,0 +1,47 @@
+/* Pestaña Cuartel de la ficha (cuartel.js) */
+.panel[data-tab="quarters"] { overflow-y: auto; }
+
+.quarters { display: flex; flex-direction: column; gap: 8px; }
+.q-rank { margin: 0; color: var(--gold); font-size: 13px; }
+
+.q-views { display: flex; flex-wrap: wrap; gap: 4px; }
+.q-view {
+  padding: 3px 9px;
+  border: 1px solid #5a4a2a;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, .45);
+  color: #c9b98f;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.q-view.active { border-color: var(--gold); color: var(--gold); background: rgba(80, 55, 10, .5); }
+
+.q-body { display: flex; flex-direction: column; gap: 8px; }
+
+.q-mission {
+  padding: 8px 10px;
+  border: 1px solid #5a4a2a;
+  border-radius: 4px;
+  background: linear-gradient(rgba(60, 45, 20, .55), rgba(20, 15, 5, .7));
+}
+.q-mission header { display: flex; justify-content: space-between; gap: 8px; color: var(--gold); }
+.q-mission p { margin: 4px 0; font-size: 13px; }
+.q-place { color: #b8b8b8; }
+.q-reward { color: #9ee09e; }
+.q-team { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 6px 0; }
+.q-team select { max-width: 100%; padding: 2px 4px; background: #111; color: #eee; border: 1px solid #5a4a2a; font: inherit; font-size: 13px; }
+.q-chance { color: var(--gold); font-size: 13px; }
+
+.q-icon { width: 20px; height: 20px; vertical-align: middle; border: 1px solid #000; border-radius: 3px; }
+
+.q-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.q-list li { padding: 5px 8px; border-left: 2px solid #5a4a2a; background: rgba(0, 0, 0, .35); }
+.q-state { float: right; color: #b8b8b8; }
+.q-timer { color: var(--gold); font-variant-numeric: tabular-nums; }
+
+.q-reputation li { display: flex; align-items: center; gap: 8px; }
+.q-faction { flex: 0 0 42%; }
+.q-bar { position: relative; flex: 1; height: 16px; border: 1px solid #000; background: #222; }
+.q-bar span { position: absolute; inset: 0 auto 0 0; background: linear-gradient(#2f8f2f, #165616); }
+.q-bar em { position: relative; display: block; text-align: center; font-size: 11px; font-style: normal; line-height: 16px; text-shadow: var(--outline); }

@@ -45,7 +45,7 @@ const PAPERDOLL = {
 };
 
 const RARITIES = ['poor', 'common', 'uncommon', 'rare', 'epic', 'legendary'];
-const TABS = { character: 'Personaje', inventory: 'Inventario', loot: 'Botín', spells: 'Hechizos', achievements: 'Logros' };
+const TABS = { character: 'Personaje', inventory: 'Inventario', loot: 'Botín', spells: 'Hechizos', achievements: 'Logros', quarters: 'Cuartel' };
 const SPELLS_PER_PAGE = 12;
 
 const app = document.getElementById('app');
@@ -164,6 +164,7 @@ function renderViewer(viewer, tab = 'character') {
           <div class="panel" data-tab="loot" hidden>${lootHistory(viewer)}</div>
           <div class="panel" data-tab="spells" hidden>${spellbook()}</div>
           <div class="panel" data-tab="achievements" hidden>${achievementList(viewer, viewerAchievements)}</div>
+          <div class="panel" data-tab="quarters" hidden>${quartersPanel(viewer)}</div>
         </section>
         <nav class="tabs">
           ${Object.entries(TABS).map(([key, label]) => `<button data-tab="${key}">${label}</button>`).join('')}
@@ -186,6 +187,7 @@ function renderViewer(viewer, tab = 'character') {
   setupFramePicker(viewer);
   setupRolePicker(viewer);
   setupModel3d();
+  setupQuarters(viewer);
   initChat();
   // Se mide con Personaje a la vista: oculta mide 0 (al redibujar parado en Inventario las armas tapaban las pestañas)
   fixPanelHeight(app.querySelector('.frame'));
