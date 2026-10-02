@@ -8,7 +8,7 @@
   <link rel="icon" href="https://wow.zamimg.com/images/wow/icons/large/inv_misc_book_09.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="logs.css?v=202610021011">
+  <link rel="stylesheet" href="logs.css?v=202610021024">
 </head>
 <body>
   <main class="logs">
@@ -36,17 +36,20 @@
         <label class="logs-check"><input type="checkbox" id="failures"> Solo fallos</label>
       </form>
 
-      <p class="logs-count" id="count"></p>
+      <div class="logs-toolbar">
+        <p class="logs-count" id="count"></p>
+        <button type="button" id="copy" title="Copia las filas que se ven, para pegarlas en otro lado">Copiar registro</button>
+      </div>
       <div class="logs-table-wrap">
         <table class="logs-table">
           <thead>
-            <tr><th>Hora</th><th>Usuario</th><th>Tipo</th><th>Qué</th><th>Escribió</th><th>Respuesta del juego</th><th>Puntos</th></tr>
+            <tr><th>Hora</th><th>Estado</th><th>Código</th><th>Usuario</th><th>Tipo</th><th>Qué</th><th>Escribió</th><th>Respuesta del juego</th><th>Puntos</th></tr>
           </thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
     </section>
   </main>
-  <script src="logs.js?v=202610021011"></script>
+  <script src="logs.js?v=202610021024"></script>
 </body>
 </html>

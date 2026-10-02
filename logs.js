@@ -5,6 +5,8 @@ const SESSION_KEY = 'armeriaSesion';
 const TIME_ZONE = 'America/Argentina/Buenos_Aires';
 const UTC_OFFSET = '-03:00';
 const DAY_MS = 86400000;
+const OK_STATUS = 200;
+const STATUS_TEXT = { 200: 'OK', 400: 'rechazado por el juego', 500: 'error de la API', 502: 'Twitch no pudo cobrar o devolver' };
 
 const $ = id => document.getElementById(id);
 let entries = [];
@@ -77,7 +79,7 @@ function fillOptions(id, values) {
   select.value = [...select.options].some(o => o.value === chosen) ? chosen : '';
 }
 
-const failed = entry => entry.problem || entry.pointsOk === false;
+const failed = entry => entry.status !== OK_STATUS;
 
 function visibleEntries() {
   const user = $('user').value.trim().toLowerCase();
@@ -100,13 +102,33 @@ function render() {
   $('rows').innerHTML = shown.map(entry => `
     <tr class="${failed(entry) ? 'failed' : ''}">
       <td class="logs-time">${timeText.format(entry.created)}</td>
+      <td><span class="logs-dot ${failed(entry) ? 'bad' : 'ok'}" title="${escapeHtml(STATUS_TEXT[entry.status] || '')}"></span></td>
+      <td class="logs-code" title="${escapeHtml(STATUS_TEXT[entry.status] || '')}">${entry.status}</td>
       <td>${escapeHtml(entry.name || entry.login)}</td>
       <td>${escapeHtml(entry.kind)}</td>
       <td>${escapeHtml(entry.action)}</td>
       <td>${escapeHtml(entry.input)}</td>
       <td class="logs-result">${escapeHtml(entry.result)}</td>
       <td>${pointsCell(entry)}</td>
-    </tr>`).join('') || '<tr><td colspan="7" class="logs-empty">Nada en este rango.</td></tr>';
+    </tr>`).join('') || '<tr><td colspan="9" class="logs-empty">Nada en este rango.</td></tr>';
+}
+
+// Lo que se ve, como tabla de texto (columnas separadas por tab) para pegarla en un chat o una planilla
+function copyText() {
+  const header = ['Hora', 'Estado', 'Código', 'Usuario', 'Tipo', 'Qué', 'Escribió', 'Respuesta del juego', 'Puntos'];
+  const rows = visibleEntries().map(entry => [
+    timeText.format(entry.created), failed(entry) ? 'FALLO' : 'OK', entry.status, entry.name || entry.login,
+    entry.kind, entry.action, entry.input, entry.result.replace(/\n/g, ' | '), entry.points || ''
+  ]);
+  return [header, ...rows].map(row => row.join('\t')).join('\n');
+}
+
+async function copyLog() {
+  const button = $('copy');
+  const label = button.textContent;
+  const copied = await navigator.clipboard.writeText(copyText()).then(() => true, () => false);
+  button.textContent = copied ? '¡Copiado!' : 'No se pudo copiar';
+  setTimeout(() => { button.textContent = label; }, 2000);
 }
 
 function escapeHtml(text) {
@@ -122,6 +144,7 @@ $('filters').addEventListener('submit', event => {
   load();
 });
 ['user', 'kind', 'action', 'failures'].forEach(id => $(id).addEventListener('input', render));
+$('copy').addEventListener('click', copyLog);
 
 setRange('30d');
 load();
