@@ -185,6 +185,7 @@ function renderViewer(viewer, tab = 'character') {
   setupTitlePicker(viewer);
   setupFramePicker(viewer);
   setupRolePicker(viewer);
+  setupModel3d();
   initChat();
   // Se mide con Personaje a la vista: oculta mide 0 (al redibujar parado en Inventario las armas tapaban las pestañas)
   fixPanelHeight(app.querySelector('.frame'));
@@ -215,6 +216,7 @@ function paperdoll(viewer, itemsById) {
     <div class="paperdoll">
       ${column('left')}
       <div class="model">
+        ${model3dButton(viewer)}
         ${silhouette(viewer, itemsById)}
         <dl class="stats">
           ${stats.map(([label, value]) => `<div><dt>${label}:</dt><dd>${value}</dd></div>`).join('')}
