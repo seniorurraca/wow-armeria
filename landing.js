@@ -51,6 +51,9 @@ async function showChannelAvatar() {
 
 // ---------- Ranking de la armería ----------
 
+const RANKING_PER_PAGE = 15;
+let showRankingPage = null;
+
 // Por GearScore del equipo puesto; desempata por legendarios y épicos
 function renderRanking(armory) {
   const ranked = Object.entries(armory.viewers)
@@ -62,9 +65,17 @@ function renderRanking(armory) {
 
   if (!ranked.length) return renderRankingStatus('Nadie tiene botín todavía. ¡Sé el primero en abrir un cofre!');
 
-  document.getElementById('ranking-list').innerHTML = ranked.map(({ login, viewer, score, epic, legendary }, i) => `
+  const list = document.getElementById('ranking-list');
+  showRankingPage ??= fixedPages(list, RANKING_PER_PAGE, (page, offset) => {
+    list.innerHTML = page.map((entry, i) => rankingRow(entry, offset + i + 1)).join('');
+  });
+  showRankingPage(ranked);
+}
+
+function rankingRow({ login, viewer, score, epic, legendary }, rank) {
+  return `
     <a class="row" href="?u=${encodeURIComponent(login)}">
-      <span class="rank">${i + 1}</span>
+      <span class="rank">${rank}</span>
       <span class="row-portrait">
         ${framedPortrait(viewer, portrait(viewer), 'row-icon')}
         <span class="level-badge" title="${levelText(viewer)}">${levelOf(viewer)}</span>
@@ -76,7 +87,7 @@ function renderRanking(armory) {
         <span data-rarity="epic" class="item-name">${epic} ép.</span>
       </span>
       <span class="row-score">${coloredGearScore(score)}<small>GS</small></span>
-    </a>`).join('');
+    </a>`;
 }
 
 function renderRankingStatus(text) {

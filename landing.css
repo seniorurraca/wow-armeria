@@ -7,6 +7,8 @@
   --live: #eb0400;
   /* Barras de las visitas: dorado validado contra --panel (el de los botones es demasiado claro para una barra) */
   --visit-bar: #b8892a;
+  --vote-up: #ff8b3d;
+  --vote-down: #8fa6ff;
 }
 
 html { scroll-behavior: smooth; }
@@ -535,6 +537,32 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
 }
 
 .suggestion img { flex: none; width: 36px; height: 36px; border-radius: 50%; }
+.suggestion-body { min-width: 0; }
+
+.suggestion-votes {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32px;
+}
+
+.suggestion-votes button {
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: #7d7867;
+  font-size: 16px;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.suggestion-votes button:hover { color: #fff; }
+.vote-score { color: var(--text-soft); font-size: 14px; -webkit-text-stroke: 0; }
+.suggestion-votes[data-vote="1"] .vote-up, .suggestion-votes[data-vote="1"] .vote-score { color: var(--vote-up); }
+.suggestion-votes[data-vote="-1"] .vote-down, .suggestion-votes[data-vote="-1"] .vote-score { color: var(--vote-down); }
+.suggestion-vote-login { margin-top: 6px; color: var(--text-soft); font-size: 13px; -webkit-text-stroke: 0; }
+.suggestion-vote-login a { color: var(--button); text-decoration: underline; }
 .suggestion-author small { margin-left: 6px; color: #7d7867; font-size: 12px; -webkit-text-stroke: 0; }
 .suggestion-text { margin-top: 4px; color: var(--text-soft); font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; white-space: pre-line; -webkit-text-stroke: 0; }
 

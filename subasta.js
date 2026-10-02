@@ -7,6 +7,7 @@ const AUCTIONEER_ICON = 'inv_misc_coin_02';
 const VENDOR_ICON = 'inv_misc_bag_10';
 const MAX_AUCTION_GOLD = 100000;
 const RARITY_NAMES = { uncommon: 'Poco común', rare: 'Raro', epic: 'Épico' };
+const AUCTIONS_PER_PAGE = 15;
 
 // Tipo de Wowhead → categoría de la columna izquierda, como en el juego
 const AUCTION_CATEGORIES = [
@@ -92,7 +93,7 @@ function renderAuctionHouse(armory) {
           <nav class="ah-categories">
             ${AUCTION_CATEGORIES.map(c => `<button type="button" data-category="${c.key}"${c.sub ? ' class="sub"' : ''}>${c.label}</button>`).join('')}
           </nav>
-          <div class="ah-results"></div>
+          <div class="ah-main"><div class="ah-results"></div></div>
         </div>
         <footer class="ah-footer">
           ${viewer ? `<span class="ah-gold">Tu oro: ${moneyHtml(viewer.gold ?? 0)}</span>` : '<span></span>'}
@@ -111,14 +112,15 @@ function renderAuctionHouse(armory) {
   const buy = app.querySelector('.ah-buy');
   const auctions = activeAuctions(armory);
 
-  const show = () => {
+  const showPage = fixedPages(results, AUCTIONS_PER_PAGE, page => { results.innerHTML = auctionTable(page, armory, state); });
+
+  const show = (keepPage = false) => {
     const shown = auctions.filter(a => auctionMatches(a, state, viewer)).sort(auctionSorter(state));
     if (!shown.some(a => a.id === state.selected)) state.selected = null;
-    results.innerHTML = auctionTable(shown, armory, state);
+    showPage(shown, keepPage);
     const selected = auctions.find(a => a.id === state.selected);
     buy.disabled = !selected || selected.seller === me;
     app.querySelectorAll('.ah-categories button').forEach(b => b.classList.toggle('active', b.dataset.category === state.category));
-    if (window.$WowheadPower) window.$WowheadPower.refreshLinks();
   };
 
   app.querySelector('.ah-search').addEventListener('submit', event => event.preventDefault());
@@ -136,11 +138,12 @@ function renderAuctionHouse(armory) {
     if (header) {
       state.dir = state.sort === header.dataset.sort ? -state.dir : 1;
       state.sort = header.dataset.sort;
+      show();
     } else if (row) {
       event.preventDefault();
       state.selected = Number(row.dataset.id);
+      show(true);
     }
-    show();
   });
   buy.addEventListener('click', () => openBuyWindow(auctions.find(a => a.id === state.selected), viewer));
   app.querySelectorAll('.ah-cancel').forEach(button =>

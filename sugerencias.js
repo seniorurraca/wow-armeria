@@ -1,6 +1,7 @@
-// Caja de sugerencias: todos las leen, solo quien entró con Twitch escribe. Solo en la landing
+// Caja de sugerencias: todos las leen, solo quien entró con Twitch escribe y vota (▲ / ▼ como en Reddit). Solo en la landing
 if (!viewerLogin && !auctionMode) {
   loadSuggestions();
+  setupVotes();
   sessionReady.then(renderSuggestionForm);
 }
 
@@ -19,6 +20,21 @@ function renderSuggestionForm() {
   form.querySelector('button').addEventListener('click', () => sendSuggestion(form));
 }
 
+// POST con la sesión; si venció, la cierra y devuelve null
+async function postWithSession(path, body) {
+  const res = await fetch(`${API_URL}${path}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${sessionToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  }).catch(() => null);
+  if (res && res.status === 401) {
+    signOut();
+    renderSuggestionForm();
+    return null;
+  }
+  return res;
+}
+
 async function sendSuggestion(form) {
   const input = form.querySelector('.suggestion-input');
   const button = form.querySelector('button');
@@ -27,17 +43,10 @@ async function sendSuggestion(form) {
   if (!text) return;
 
   button.disabled = true;
-  const res = await fetch(`${API_URL}/suggestions`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${sessionToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text })
-  }).catch(() => null);
+  const res = await postWithSession('/suggestions', { text });
   button.disabled = false;
 
-  if (res && res.status === 401) {
-    signOut();
-    return renderSuggestionForm();
-  }
+  if (!signedInUser) return;
   if (!res || !res.ok) {
     status.textContent = 'No se pudo enviar. Prueba de nuevo.';
     return;
@@ -48,7 +57,8 @@ async function sendSuggestion(form) {
 }
 
 async function loadSuggestions() {
-  const res = await fetch(`${API_URL}/suggestions`).catch(() => null);
+  const headers = sessionToken ? { Authorization: `Bearer ${sessionToken}` } : {};
+  const res = await fetch(`${API_URL}/suggestions`, { headers }).catch(() => null);
   if (!res || !res.ok) return;
   const { suggestions } = await res.json();
   document.getElementById('suggestion-list').innerHTML = suggestions.map(suggestionHtml).join('')
@@ -59,11 +69,40 @@ function suggestionHtml(suggestion) {
   const date = new Date(suggestion.created).toLocaleDateString('es', { day: 'numeric', month: 'long' });
   const avatar = suggestion.avatar ? `<img src="${escapeHtml(suggestion.avatar)}" alt="">` : '';
   return `
-    <div class="suggestion">
+    <div class="suggestion" data-id="${suggestion.id}">
+      <div class="suggestion-votes" data-vote="${suggestion.myVote}">
+        <button class="vote-up" type="button" data-value="1" aria-label="Voto a favor">▲</button>
+        <span class="vote-score">${suggestion.score}</span>
+        <button class="vote-down" type="button" data-value="-1" aria-label="Voto en contra">▼</button>
+      </div>
       ${avatar}
-      <div>
+      <div class="suggestion-body">
         <p class="suggestion-author"><strong>${escapeHtml(suggestion.name)}</strong> <small>${escapeHtml(date)}</small></p>
         <p class="suggestion-text">${escapeHtml(suggestion.text)}</p>
+        <p class="suggestion-vote-login" hidden><a href="${escapeHtml(loginUrl())}">Entra con Twitch</a> para votar.</p>
       </div>
     </div>`;
+}
+
+function setupVotes() {
+  document.getElementById('suggestion-list').addEventListener('click', event => {
+    const button = event.target.closest('.suggestion-votes button');
+    if (button) vote(button.closest('.suggestion'), Number(button.dataset.value));
+  });
+}
+
+async function vote(card, value) {
+  const askLogin = () => card.querySelector('.suggestion-vote-login').hidden = false;
+  if (!signedInUser) return askLogin();
+
+  const votes = card.querySelector('.suggestion-votes');
+  votes.querySelectorAll('button').forEach(b => b.disabled = true);
+  const res = await postWithSession('/suggestions/vote', { id: Number(card.dataset.id), value });
+  votes.querySelectorAll('button').forEach(b => b.disabled = false);
+
+  if (!signedInUser) return askLogin();
+  if (!res || !res.ok) return;
+  const { score, myVote } = await res.json();
+  votes.dataset.vote = myVote;
+  votes.querySelector('.vote-score').textContent = score;
 }
