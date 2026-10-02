@@ -111,6 +111,25 @@ code {
 
 .session-logout:hover { color: var(--button); }
 
+/* Botón del Cuartel: fuera del menú para que se vea también en celular, dorado y con brillo */
+.nav-cuartel {
+  margin-right: 12px;
+  padding: 6px 14px;
+  border: 1px solid #f5d27a;
+  border-radius: 999px;
+  background: linear-gradient(#c8961e, #7a5208);
+  color: #fff6d8;
+  font-weight: bold;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px #000;
+  animation: cuartel-glow 2.4s ease-in-out infinite;
+}
+.nav-cuartel:hover { background: linear-gradient(#e0ad2c, #8c600c); }
+@keyframes cuartel-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(245, 200, 90, .4); }
+  50% { box-shadow: 0 0 14px rgba(245, 200, 90, .9); }
+}
+
 .session-logs { margin-right: 10px; color: var(--text-soft); font-size: 13px; white-space: nowrap; }
 .session-logs:hover { color: var(--button); }
 
@@ -436,6 +455,8 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
 }
 
 .news-card:hover { transform: translateY(-3px); border-color: var(--button); }
+.channel-news { border-color: #c8961e; box-shadow: 0 0 12px rgba(245, 200, 90, .35); }
+.channel-news small { color: #f5d27a; }
 .news-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #000; }
 
 .news-body {
@@ -593,6 +614,7 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
   .brand small { display: none; }
   .session-pill, .session-logout { margin-right: 4px; }
   .session-logout { font-size: 12px; }
+  .nav-cuartel { margin-right: 4px; padding: 5px 10px; font-size: 13px; }
   .session-pill.logged-in span { display: none; }
   .session-pill.logged-in { padding: 4px; }
   .session-pill { padding: 7px 12px; }

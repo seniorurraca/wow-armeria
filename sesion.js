@@ -81,6 +81,7 @@ const sessionReady = sessionUser(sessionToken).then(user => {
   signedInUser = user;
   renderSession(user);
   if (user) showSessionFrame(user);
+  setupQuartersEntry(user);
 });
 
 document.getElementById('session-logout').addEventListener('click', signOut);

@@ -9,6 +9,28 @@ let quartersView = 'board';
 // Hasta el lanzamiento (Parche 1.1) la pestaña solo la ve el streamer, para probarla
 const QUARTERS_LAUNCH = Date.parse('2026-10-09T00:00:00-03:00');
 const quartersOpen = () => Date.now() >= QUARTERS_LAUNCH || signedInUser?.login === CHANNEL;
+// ?cuartel: el botón del menú. Lleva a la ficha propia con la pestaña Cuartel abierta (sin sesión, primero a entrar con Twitch)
+const quartersRoute = new URLSearchParams(location.search).has('cuartel');
+const ownQuartersUrl = user => `./?u=${encodeURIComponent(user.login)}&cuartel`;
+
+// Lo llama sesion.js al saber quién mira
+function setupQuartersEntry(user) {
+  document.getElementById('nav-cuartel').hidden = !quartersOpen();
+  if (!quartersRoute || viewerLogin || !quartersOpen()) return;
+  location.replace(user ? ownQuartersUrl(user) : loginUrl());
+}
+
+// Quien todavía no está en la armería (nunca ganó nada) también puede abrir su cuartel
+function showQuartersStart() {
+  app.innerHTML = `<p class="status">Todavía no tienes personaje en la armería, pero ya puedes abrir tu cuartel.</p>
+    <button class="wow-button q-start" type="button">Abrir mi cuartel</button>`;
+  app.querySelector('.q-start').addEventListener('click', async event => {
+    event.target.disabled = true;
+    const result = await runCommand('!cuartel');
+    if (result.ok) location.reload();
+    else event.target.disabled = false;
+  });
+}
 
 const loadQuartersCatalog = () => quartersCatalogLoad ||= fetch(`${API_URL}/quarters`).then(res => res.json()).then(c => { quartersCatalog = c; });
 const catalogEntry = (list, id) => list.find(entry => entry.id === id);
