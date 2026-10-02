@@ -568,6 +568,7 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
 
 #armeria .frame { max-width: 720px; margin-top: 20px; }
 #armeria .panel { min-height: 0; }
+#ranking-list { align-content: start; }
 
 .footer {
   max-width: 1120px;

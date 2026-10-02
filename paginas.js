@@ -12,8 +12,9 @@ function setupPagedLists(root) {
   root.querySelectorAll(PAGED_LISTS).forEach(paginate);
 }
 
-// ◀ Página x de y ▶ abajo de list: onStep(-1 o 1) al tocar una flecha; devuelve update(page, pages) para pintarlo
-function addPager(list, onStep) {
+// ◀ Página x de y ▶ abajo de list: onStep(-1 o 1) al tocar una flecha; devuelve update(page, pages) para pintarlo.
+// Con una sola página se oculta, salvo alwaysShown (páginas fijas: que no se mueva lo de abajo)
+function addPager(list, onStep, alwaysShown = false) {
   const pager = document.createElement('div');
   pager.className = 'spell-pager list-pager';
   pager.innerHTML = `
@@ -31,22 +32,26 @@ function addPager(list, onStep) {
     pager.querySelector('.page-label').textContent = `Página ${page + 1} de ${pages}`;
     prev.disabled = page === 0;
     next.disabled = page === pages - 1;
-    pager.hidden = pages === 1;
+    pager.hidden = pages === 1 && !alwaysShown;
     if (window.$WowheadPower) window.$WowheadPower.refreshLinks();
   };
 }
 
 // Páginas de tamaño fijo (subasta, ranking): renderPage(los de la página, cuántos hay antes) pinta list.
+// La lista no se achica: queda con el alto más grande que tuvo (una página corta no mueve lo de abajo).
 // Devuelve show(items, keepPage): con keepPage sigue en la misma página, si no vuelve a la primera
 function fixedPages(list, perPage, renderPage) {
   let items = [];
   let page = 0;
-  const update = addPager(list, step => { page += step; paint(); });
+  let tallest = 0;
+  const update = addPager(list, step => { page += step; paint(); }, true);
 
   const paint = () => {
     const pages = Math.max(1, Math.ceil(items.length / perPage));
     page = Math.min(page, pages - 1);
     renderPage(items.slice(page * perPage, (page + 1) * perPage), page * perPage);
+    tallest = Math.max(tallest, list.offsetHeight);
+    list.style.minHeight = `${tallest}px`;
     update(page, pages);
   };
 
