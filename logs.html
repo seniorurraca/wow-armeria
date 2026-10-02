@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Registro de actividad</title>
+  <link rel="icon" href="https://wow.zamimg.com/images/wow/icons/large/inv_misc_book_09.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="logs.css?v=202610021008">
+</head>
+<body>
+  <main class="logs">
+    <header class="logs-header">
+      <h1>Registro de actividad</h1>
+      <p>Canjes, comandos y eventos del juego, con lo que respondió y si Twitch cobró o devolvió los puntos. Hora de Buenos Aires.</p>
+    </header>
+
+    <p class="logs-status" id="status">Cargando…</p>
+    <a class="logs-login" id="login" hidden>Entrar con Twitch</a>
+
+    <section id="panel" hidden>
+      <form class="logs-filters" id="filters">
+        <label>Desde <input type="datetime-local" id="from" required></label>
+        <label>Hasta <input type="datetime-local" id="to" placeholder="ahora"></label>
+        <div class="logs-ranges">
+          <button type="button" data-range="today">Hoy</button>
+          <button type="button" data-range="24h">Últimas 24 h</button>
+          <button type="button" data-range="30d">30 días</button>
+        </div>
+        <button type="submit" class="logs-primary">Buscar</button>
+        <label>Usuario <input type="search" id="user" placeholder="nick"></label>
+        <label>Tipo <select id="kind"><option value="">Todos</option></select></label>
+        <label>Qué <select id="action"><option value="">Todo</option></select></label>
+        <label class="logs-check"><input type="checkbox" id="failures"> Solo fallos</label>
+      </form>
+
+      <p class="logs-count" id="count"></p>
+      <div class="logs-table-wrap">
+        <table class="logs-table">
+          <thead>
+            <tr><th>Hora</th><th>Usuario</th><th>Tipo</th><th>Qué</th><th>Escribió</th><th>Respuesta del juego</th><th>Puntos</th></tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="logs.js?v=202610021008"></script>
+</body>
+</html>
