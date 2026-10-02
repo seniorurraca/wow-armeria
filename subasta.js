@@ -143,6 +143,8 @@ function renderAuctionHouse(armory) {
     show();
   });
   buy.addEventListener('click', () => openBuyWindow(auctions.find(a => a.id === state.selected), viewer));
+  app.querySelectorAll('.ah-cancel').forEach(button =>
+    button.addEventListener('click', () => openCancelWindow(auctions.find(a => a.id === Number(button.dataset.id)))));
   app.querySelectorAll('.tabs button').forEach(button => button.addEventListener('click', () => showTab(button.dataset.tab)));
   setupNickForm();
 
@@ -216,6 +218,19 @@ function openBuyWindow(auction, viewer) {
   overlay.querySelector('.close-button').addEventListener('click', () => overlay.remove());
 }
 
+function openCancelWindow(auction) {
+  const item = auction.item;
+  const overlay = showOverlay(`
+    <div class="overlay-window equip-window" data-rarity="${item.rarity}">
+      ${itemShowcase(item)}
+      <p>El objeto vuelve a tu mochila. El depósito de ${moneyHtml(auction.deposit)} no se devuelve.</p>
+      ${commandBlock(`!cancelarsubasta ${auction.id}`, 'cancelarla', 'Cancelar subasta')}
+      <button class="wow-button close-button" type="button">Cerrar</button>
+    </div>`);
+  setupCommand(overlay, () => { overlay.remove(); loadArmory().then(render); });
+  overlay.querySelector('.close-button').addEventListener('click', () => overlay.remove());
+}
+
 // ---------- Mis subastas ----------
 
 function myAuctions(armory, me) {
@@ -236,9 +251,10 @@ function myAuctions(armory, me) {
       </a>
       <span class="row-meta">N° ${a.id} · ${timeLeftText(a)}</span>
       ${moneyHtml(a.price)}
+      <button class="wow-button ah-cancel" type="button" data-id="${a.id}">Cancelar</button>
     </div>`);
   return `
-    <p class="hint">Para vender, entra a <a class="ah-link" href="./?u=${encodeURIComponent(me)}">tu armería</a> → Inventario → <b>Vender</b>. Si nadie la compra en ${AUCTION_HOURS} h, el objeto vuelve a tu mochila (el depósito no).</p>
+    <p class="hint">Para vender, entra a <a class="ah-link" href="./?u=${encodeURIComponent(me)}">tu armería</a> → Inventario → <b>Vender</b>. Si nadie la compra en ${AUCTION_HOURS} h, o si la cancelas, el objeto vuelve a tu mochila (el depósito no).</p>
     <div class="list history">${rows.join('') || '<p class="status">No tienes subastas activas.</p>'}</div>`;
 }
 

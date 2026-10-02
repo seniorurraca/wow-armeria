@@ -152,7 +152,7 @@
 
 /* ---------- Ventana "Vender" del Inventario ---------- */
 
-.sell-button { flex: none; padding: 3px 8px; font-size: 12px; background: linear-gradient(#6a4c1c, #2e1f08); }
+.sell-button, .ah-cancel { flex: none; padding: 3px 8px; font-size: 12px; background: linear-gradient(#6a4c1c, #2e1f08); }
 .bag-list.picking .sell-button { display: none; }
 .bag-slot[data-id] { cursor: pointer; }
 

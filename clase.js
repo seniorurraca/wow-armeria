@@ -29,6 +29,7 @@ const DUAL_WIELD_CLASSES = ['warrior', 'hunter', 'rogue'];
 
 function classCanUse(item, classKey) {
   if (!item.slot || !CLASSES[classKey]) return true;
+  if (item.classes && !item.classes.includes(classKey)) return false;
   const typeKey = item.type + (item.slot === 'Two-Hand' ? ' 2H' : '');
   const classes = CLASSES_BY_ITEM_TYPE[typeKey];
   if (classes && !classes.includes(classKey)) return false;
