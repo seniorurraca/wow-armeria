@@ -28,6 +28,14 @@ const SLOTS_WITH_ENCHANT = ['mainHand', 'offHand'];
 
 const hashDigit = n => HASH_ALPHABET[n];
 
+// El tabardo no es un objeto equipado: es el cosmético elegido con !tabardo.
+// Wowhead pone en la mano el arma a distancia (jabalina, arco) en vez de la principal: solo va si no hay principal
+function slotItemId(viewer, slot) {
+  if (slot === 'tabard') return viewer.tabard;
+  if (slot === 'ranged' && viewer.equipped.mainHand) return null;
+  return viewer.equipped[slot];
+}
+
 function hashNumber(n) {
   let digits = '';
   do {
@@ -56,7 +64,7 @@ function dressingRoomUrl(viewer) {
     ...Array(CUSTOMIZATION_FIELDS).fill('0')
   ];
   MODEL_SLOTS.forEach(slot => {
-    fields.push(hashNumber(Number(viewer.equipped[slot]) || 0), '0');
+    fields.push(hashNumber(Number(slotItemId(viewer, slot)) || 0), '0');
     if (SLOTS_WITH_ENCHANT.includes(slot)) fields.push('0');
   });
   fields.push('0', '0', '0');
