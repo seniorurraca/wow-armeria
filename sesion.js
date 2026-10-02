@@ -46,6 +46,8 @@ function renderSession(user) {
   pill.classList.toggle('logged-in', !!user);
   pill.hidden = false;
   logout.hidden = !user;
+  // Registro de actividad (logs.html): solo el streamer; la API tampoco se lo da a nadie más
+  document.getElementById('session-logs').hidden = !user || user.login !== CHANNEL;
 }
 
 function loginUrl() {

@@ -109,6 +109,9 @@ code {
 
 .session-logout:hover { color: var(--button); }
 
+.session-logs { margin-right: 10px; color: var(--text-soft); font-size: 13px; white-space: nowrap; }
+.session-logs:hover { color: var(--button); }
+
 /* ---------- Indicador en vivo ---------- */
 
 .live-pill {
