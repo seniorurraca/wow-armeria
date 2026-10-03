@@ -37,7 +37,7 @@ function renderSession(user) {
   if (user) {
     pill.href = `./?u=${encodeURIComponent(user.login)}`;
     pill.innerHTML = `<img src="${escapeHtml(user.avatar || '')}" alt=""><span>${escapeHtml(user.name)}</span>`;
-    pill.title = 'Mi armería';
+    pill.title = 'Mi personaje';
   } else {
     pill.href = loginUrl();
     pill.innerHTML = 'Entrar<span class="session-long"> con Twitch</span>';
@@ -46,6 +46,7 @@ function renderSession(user) {
   pill.classList.toggle('logged-in', !!user);
   pill.hidden = false;
   logout.hidden = !user;
+  renderProfileMenu(user);
   // Registro de actividad (logs.html): solo el streamer; la API tampoco se lo da a nadie más
   document.getElementById('session-logs').hidden = !user || user.login !== CHANNEL;
 }
@@ -83,5 +84,3 @@ const sessionReady = sessionUser(sessionToken).then(user => {
   if (user) showSessionFrame(user);
   setupQuartersEntry(user);
 });
-
-document.getElementById('session-logout').addEventListener('click', signOut);

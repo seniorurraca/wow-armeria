@@ -124,7 +124,7 @@ function render(armory) {
   else if (!viewerLogin) renderRanking(armory);
   else if (armory.viewers[viewerLogin]) {
     viewerAchievements = armory.achievements || [];
-    renderViewer(armory.viewers[viewerLogin], quartersRoute && quartersOpen() ? 'quarters' : 'character');
+    renderViewer(armory.viewers[viewerLogin], requestedTab());
   }
   else if (quartersRoute && quartersOpen() && canActHere()) showQuartersStart();
   else showStatus(`${viewerLogin} todavía no tiene botín. ¡Canjea un cofre en el stream!`, true);

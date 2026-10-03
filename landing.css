@@ -99,17 +99,40 @@ code {
 .session-pill img { width: 26px; height: 26px; border-radius: 50%; }
 .session-pill span { overflow: hidden; text-overflow: ellipsis; }
 
+.session { position: relative; }
+.session-pill.logged-in { cursor: pointer; }
+
+/* Menú del retrato: las pestañas de tu propia ficha */
+.session-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 10px;
+  z-index: 20;
+  display: grid;
+  min-width: 170px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .6);
+}
+.session-menu a { padding: 8px 12px; border-radius: 4px; color: var(--text-soft); white-space: nowrap; }
+.session-menu a:hover { background: rgba(240, 199, 94, .1); color: var(--button); }
+
 .session-logout {
+  display: flex;
   margin-right: 10px;
+  padding: 4px;
   border: 0;
   background: none;
   color: #7d7867;
-  font: inherit;
-  font-size: 13px;
   cursor: pointer;
 }
 
+.session-logout svg { width: 20px; height: 20px; }
 .session-logout:hover { color: var(--button); }
+
+.confirm-buttons { display: flex; gap: 10px; }
 
 /* Botón del Cuartel: fuera del menú para que se vea también en celular, dorado y con brillo */
 .nav-cuartel {
@@ -613,7 +636,7 @@ a.card:hover { transform: translateY(-3px); border-color: var(--accent, var(--bu
   .brand { gap: 8px; }
   .brand small { display: none; }
   .session-pill, .session-logout { margin-right: 4px; }
-  .session-logout { font-size: 12px; }
+  .session-menu { right: 4px; }
   .nav-cuartel { margin-right: 4px; padding: 5px 10px; font-size: 13px; }
   .session-pill.logged-in span { display: none; }
   .session-pill.logged-in { padding: 4px; }
